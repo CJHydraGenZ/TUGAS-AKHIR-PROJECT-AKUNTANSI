@@ -1,0 +1,12 @@
+get http://localhost:5000
+
+###
+
+POST http://localhost:5000/daftar http/1.1
+Content-Type: application/json
+{
+    "username" : "ccahya",
+    "email" : "cahya@gmail.com",
+    "userlevel" : 1,
+    "password" : "123456",
+}

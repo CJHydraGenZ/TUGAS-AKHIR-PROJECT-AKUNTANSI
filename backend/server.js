@@ -30,6 +30,7 @@ const express = require("express");
 const app = express();
 
 const RouteUser = require("./routes/User");
+const RouteData = require("./routes/Data");
 const mongoose = require("mongoose");
 const cors = require("cors");
 mongoose
@@ -47,6 +48,7 @@ mongoose
 app.use(cors());
 app.use(express.json());
 app.use("/", RouteUser);
+app.use("/", RouteData);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server run port ${process.env.PORT}`);

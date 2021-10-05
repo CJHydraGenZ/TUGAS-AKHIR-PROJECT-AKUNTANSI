@@ -31,3 +31,7 @@ exports.validationLogin = [
 
   check("password", "password tidak boleh kosong").notEmpty(),
 ];
+exports.validationTambahData = [
+  check("item", "nama item tidak boleh kosong").notEmpty(),
+  check("jumlahHarga", "jumlah harga tidak boleh kosong").notEmpty(),
+];

@@ -13,5 +13,6 @@ module.exports = async (req, res, next) => {
 
   const decode = jwt.verify(token, process.env.JWT);
   req.id = decode.id;
+  
   next();
 };

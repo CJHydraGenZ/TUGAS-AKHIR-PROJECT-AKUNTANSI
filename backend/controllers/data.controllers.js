@@ -27,3 +27,12 @@ exports.getData = async (req, res) => {
     data: data,
   });
 };
+exports.getAllData = async (req, res) => {
+  // console.log(req.params.lb);
+  const data = await Data.find();
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil",
+    data: data,
+  });
+};

@@ -1,18 +1,6 @@
 const mongoose = require("mongoose");
 
-const dataSchema = mongoose.Schema({
-  funcL: {
-    type: String,
-  },
-  item: {
-    type: String,
-  },
-  jumlahHarga: {
-    type: Number,
-  },
-  tanggal: {
-    type: Date,
-  },
+const labaSchema = mongoose.Schema({
   tpu: {
     type: Number,
   },
@@ -36,4 +24,4 @@ const dataSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Data", dataSchema);
+module.exports = mongoose.model("Laba", labaSchema);

@@ -2,18 +2,19 @@ require("dotenv").config();
 const Data = require("../models/data.model");
 
 exports.TambahData = async (req, res) => {
-  const { funcL, item, jumlahHarga, total } = req.body;
+  const { funcL, item, jumlahHarga, tanggal } = req.body;
 
   const data = new Data({
     funcL,
     item,
     jumlahHarga,
-    total,
+    tanggal,
   });
   data.save();
   return res.status(201).json({
     status: true,
     msg: "Berasil di Tambah",
+    code: "add",
   });
 };
 // const user = await User.findOne({ _id: req.id });
@@ -29,13 +30,14 @@ exports.getData = async (req, res) => {
 };
 exports.updateData = async (req, res) => {
   console.log(req.params.up);
-  const { funcL, item, jumlahHarga, total } = req.body;
+  const { funcL, item, jumlahHarga, tanggal } = req.body;
   const data = await Data.findByIdAndUpdate(
     { _id: `${req.params.up}` },
     {
       $set: {
         item: item,
         jumlahHarga: jumlahHarga,
+        tanggal: tanggal,
       },
     },
     { useFindAndModify: false },
@@ -52,6 +54,7 @@ exports.updateData = async (req, res) => {
     status: true,
     msg: "berhasil di Update",
     data: data,
+    code: "update",
   });
 };
 exports.deleteData = async (req, res) => {
@@ -69,9 +72,10 @@ exports.deleteData = async (req, res) => {
     }
   );
   // console.log(data);
-  return res.status(204).json({
+  return res.status(200).json({
     status: true,
     msg: "berhasil di Hapus",
+    code: "delete",
   });
 };
 exports.getAllData = async (req, res) => {

@@ -1,26 +1,18 @@
 const mongoose = require("mongoose");
 
 const labaSchema = mongoose.Schema({
-  tpu: {
-    type: Number,
+  userId: String,
+  laba_rugi: {
+    type: Object,
   },
-  tbp: {
-    type: Number,
+  neraca: {
+    type: Array,
   },
-  bpeg: {
-    type: Number,
+  lap_keuangan: {
+    type: Array,
   },
-  bk: {
-    type: Number,
-  },
-  bpen: {
-    type: Number,
-  },
-  pl: {
-    type: Number,
-  },
-  bl: {
-    type: Number,
+  data_bulanan: {
+    type: Date,
   },
 });
 

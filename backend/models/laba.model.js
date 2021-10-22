@@ -11,7 +11,7 @@ const labaSchema = mongoose.Schema({
   lap_keuangan: {
     type: Array,
   },
-  data_bulanan: {
+  waktu_get: {
     type: Date,
   },
 });

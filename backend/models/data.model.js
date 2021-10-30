@@ -13,26 +13,8 @@ const dataSchema = mongoose.Schema({
   tanggal: {
     type: Date,
   },
-  tpu: {
-    type: Number,
-  },
-  tbp: {
-    type: Number,
-  },
-  bpeg: {
-    type: Number,
-  },
-  bk: {
-    type: Number,
-  },
-  bpen: {
-    type: Number,
-  },
-  pl: {
-    type: Number,
-  },
-  bl: {
-    type: Number,
+  tahun: {
+    type: String,
   },
 });
 

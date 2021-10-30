@@ -5,12 +5,15 @@ const { data_laba_rugi } = require("../functions/data_laba_rugi");
 
 exports.TambahData = async (req, res) => {
   const { funcL, item, jumlahHarga, tanggal } = req.body;
-
+  // console.log("tahun", new Date().getFullYear());
+  const tahun = new Date(tanggal).getFullYear().toString();
+  // console.log("tanggal", new Date(tanggal).getFullYear().toString());
   const data = new Data({
     funcL,
     item,
     jumlahHarga,
     tanggal,
+    tahun,
   });
   data.save();
   return res.status(201).json({
@@ -81,27 +84,9 @@ exports.getAllData = async (req, res) => {
   });
 };
 
-// exports.getData = async (req, res) => {
-//   console.log(req.params.lb);
-//   const data = await Data.find({ funcL: `${req.params.lb}` });
-//   return res.status(200).json({
-//     status: true,
-//     msg: "berhasil",
-//     data: data,
-//   });
-// };
-
-//? Udah Di dapat Algoritamnya
 exports.getData = async (req, res) => {
-  const { awal, akhir } = req.body;
   console.log(req.params.lb);
-
-  const data = await Data.find({
-    tanggal: {
-      $gte: "2021-10-16T16:00:00.000+00:00", //! bisa menggunakan pilihan
-      $lt: "2021-12-30T16:00:00.000+00:00", //! pilihan aja
-    },
-  });
+  const data = await Data.find({ funcL: `${req.params.lb}` });
   return res.status(200).json({
     status: true,
     msg: "berhasil",
@@ -109,10 +94,45 @@ exports.getData = async (req, res) => {
   });
 };
 
+//? Udah Di dapat Algoritamnya
+// exports.getData = async (req, res) => {
+//   const { awal, akhir } = req.body;
+//   console.log(req.params.lb);
+
+//   const data = await Data.find({
+//     tanggal: {
+//       $gte: "2021-10-16T16:00:00.000+00:00", //! bisa menggunakan pilihan
+//       $lt: "2021-12-30T16:00:00.000+00:00", //! pilihan aja
+//     },
+//   });
+//   return res.status(200).json({
+//     status: true,
+//     msg: "berhasil",
+//     data: data,
+//   });
+// };
+
 exports.getSPecData = async (req, res) => {
+  const tahun = new Date().getFullYear().toString();
+  const data = await Data.find({ tahun });
+  const LData = data_laba_rugi(data);
+  const laba = new Laba({
+    userId: req.id,
+    laba_rugi: LData,
+    waktu_get: Date.now(),
+  });
+  laba.save();
+  return res.status(200).json({
+    status: true,
+    msg: "Get All Data Success",
+    data: LData,
+  });
+};
+
+exports.PostSPecData = async (req, res) => {
   const { awal, akhir } = req.body;
-  // console.log(req.params.lb);
-  // console.log("ini awal", awal, "inni akhir", akhir);
+
+  console.log("ini awal", awal, "inni akhir", akhir);
   if (awal && akhir) {
     const data = await Data.find({
       tanggal: {
@@ -133,22 +153,6 @@ exports.getSPecData = async (req, res) => {
     return res.status(200).json({
       status: true,
       msg: "Get Specific Data Success",
-      data: LData,
-    });
-  } else {
-    const data = await Data.find();
-    const LData = data_laba_rugi(data);
-
-    const laba = new Laba({
-      userId: req.id,
-      laba_rugi: LData,
-      waktu_get: akhir || Date.now(),
-    });
-    laba.save();
-
-    return res.status(200).json({
-      status: true,
-      msg: "Get All Data Success",
       data: LData,
     });
   }

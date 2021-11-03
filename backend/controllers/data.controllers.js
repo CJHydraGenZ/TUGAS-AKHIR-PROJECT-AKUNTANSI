@@ -3,6 +3,7 @@ const Data = require("../models/data.model");
 const Laba = require("../models/laba.model");
 const Neraca = require("../models/neraca.model");
 const { data_laba_rugi } = require("../functions/data_laba_rugi");
+const { data_neraca } = require("../functions/data_neraca");
 
 exports.TambahData = async (req, res) => {
   const { funcL, item, jumlahHarga, tanggal } = req.body;
@@ -119,7 +120,7 @@ exports.getSPecData = async (req, res) => {
   const LData = data_laba_rugi(data);
   const laba = new Laba({
     userId: req.id,
-    laba_rugi: LData,
+    data: LData,
     waktu_get: Date.now(),
   });
   laba.save();
@@ -146,7 +147,7 @@ exports.PostSPecData = async (req, res) => {
 
     const laba = new Laba({
       userId: req.id,
-      laba_rugi: LData,
+      data: LData,
       waktu_get: akhir,
     });
     laba.save();
@@ -158,3 +159,48 @@ exports.PostSPecData = async (req, res) => {
     });
   }
 };
+// exports.getSPecNeraca = async (req, res) => {
+//   const tahun = new Date().getFullYear().toString();
+//   const data = await Data.find({ tahun });
+//   const NData = data_neraca(data);
+//   const laba = new Laba({
+//     userId: req.id,
+//     data: NData,
+//     waktu_get: Date.now(),
+//   });
+//   laba.save();
+//   return res.status(200).json({
+//     status: true,
+//     msg: "Get All Data Success",
+//     data: NData,
+//   });
+// };
+
+// exports.PostSPecNeraca = async (req, res) => {
+//   const { awal, akhir } = req.body;
+
+//   // console.log("ini awal", awal, "inni akhir", akhir);
+//   if (awal && akhir) {
+//     const data = await Data.find({
+//       tanggal: {
+//         $gte: `${awal}`, //! bisa menggunakan pilihan
+//         $lt: `${akhir}`, //! pilihan aja
+//       },
+//     });
+//     const NData = data_neraca(data);
+//     // console.log("ini data", NData);
+
+//     const laba = new Laba({
+//       userId: req.id,
+//       data: NData,
+//       waktu_get: akhir,
+//     });
+//     laba.save();
+
+//     return res.status(200).json({
+//       status: true,
+//       msg: "Get Specific Data Success",
+//       data: NData,
+//     });
+//   }
+// };

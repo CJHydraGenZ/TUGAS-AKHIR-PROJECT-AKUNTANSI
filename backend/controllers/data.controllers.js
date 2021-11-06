@@ -3,6 +3,7 @@ const Data = require("../models/data.model");
 const Laba = require("../models/laba.model");
 const Neraca = require("../models/neraca.model");
 const Persediaan = require("../models/persediaan.model");
+const DataPersediaan = require("../models/data.persediaan.model");
 const { data_laba_rugi } = require("../functions/data_laba_rugi");
 const { data_neraca } = require("../functions/data_neraca");
 
@@ -44,13 +45,15 @@ exports.TambahData = async (req, res) => {
 //   type: Number,
 // },
 exports.TambahDataPersediaan = async (req, res) => {
-  const { funcL, kuantitas, harga, tanggal } = req.body;
+  const { persediaanName, funcL, kuantitas, harga, tanggal } = req.body;
   // console.log("tahun", new Date().getFullYear());
   const tahun = new Date(tanggal).getFullYear().toString();
   // console.log("tanggal", new Date(tanggal).getFullYear().toString());
+  console.log(persediaanName);
 
   let jumlah = kuantitas * harga;
   const data = new Persediaan({
+    persediaanName,
     funcL,
     kuantitas,
     harga,
@@ -59,6 +62,24 @@ exports.TambahDataPersediaan = async (req, res) => {
     jumlah,
   });
   data.save();
+  const penjualan = await Persediaan.find({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `penjualan`,
+  });
+  const pembelian = await Persediaan.find({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `pembelian`,
+  });
+  const data_persediaan = new DataPersediaan({
+    // persediaanName,
+    persediaanData: {
+      [persediaanName]: {
+        penjualan,
+        pembelian,
+      },
+    },
+  });
+  data_persediaan.save();
   return res.status(201).json({
     status: true,
     msg: "Berasil di Tambah",
@@ -248,6 +269,7 @@ exports.PostSPecData = async (req, res) => {
 exports.getAllDataPersediaan = async (req, res) => {
   // console.log(req.params.lb);
   const data = await Persediaan.find();
+
   return res.status(200).json({
     status: true,
     msg: "berhasil",
@@ -255,12 +277,25 @@ exports.getAllDataPersediaan = async (req, res) => {
   });
 };
 exports.getAllDataPersediaanSpec = async (req, res) => {
-  // console.log(req.params.funcL);
+  console.log(req.params.funcL);
   // req.params.funcL
-  const data = await Persediaan.find({ funcL: `${req.params.funcL}` });
+  // const data = await Persediaan.find({ funcL: `${req.params.funcL}` });
+  const penjualan = await Persediaan.find({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `penjualan`,
+  });
+  const pembelian = await Persediaan.find({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `pembelian`,
+  });
   return res.status(200).json({
     status: true,
     msg: "berhasil",
-    data: data,
+    data: {
+      [req.params.funcL]: {
+        penjualan,
+        pembelian,
+      },
+    },
   });
 };

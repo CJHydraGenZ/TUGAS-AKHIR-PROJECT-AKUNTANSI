@@ -18,6 +18,7 @@ const wraping = (e, t, data) => {
 };
 
 exports.data_laba_rugi = (data) => {
+  //? laba rugi
   const { tpu, totalTPU } = wraping("tpu", "totalTPU", data);
   const { tbp, totalTBP } = wraping("tbp", "totalTBP", data);
   const { bpeg, totalBPEG } = wraping("bpeg", "totalBPEG", data);

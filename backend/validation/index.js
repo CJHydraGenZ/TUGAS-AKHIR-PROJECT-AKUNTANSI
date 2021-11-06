@@ -35,3 +35,15 @@ exports.validationTambahData = [
   check("item", "nama item tidak boleh kosong").notEmpty(),
   check("jumlahHarga", "jumlah harga tidak boleh kosong").notEmpty(),
 ];
+
+// funcL,
+// kuantitas,
+// harga,
+// tanggal,
+// tahun,
+// jumlah,
+exports.validationTambahDataPersediaan = [
+  check("kuantitas", "kuantitas tidak boleh kosong").notEmpty(),
+  check("harga", "jumlah harga tidak boleh kosong").notEmpty(),
+  check("tanggal", "tidak bolek tidak boleh kosong").notEmpty(),
+];

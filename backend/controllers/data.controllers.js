@@ -2,6 +2,7 @@ require("dotenv").config();
 const Data = require("../models/data.model");
 const Laba = require("../models/laba.model");
 const Neraca = require("../models/neraca.model");
+const Persediaan = require("../models/persediaan.model");
 const { data_laba_rugi } = require("../functions/data_laba_rugi");
 const { data_neraca } = require("../functions/data_neraca");
 
@@ -16,6 +17,46 @@ exports.TambahData = async (req, res) => {
     jumlahHarga,
     tanggal,
     tahun,
+  });
+  data.save();
+  return res.status(201).json({
+    status: true,
+    msg: "Berasil di Tambah",
+    code: "add",
+  });
+};
+// funcL: {
+//   type: String,
+// },
+// kuantitas: {
+//   type: Number,
+// },
+// harga: {
+//   type: Number,
+// },
+// tanggal: {
+//   type: Date,
+// },
+// tahun: {
+//   type: String,
+// },
+// jumlah: {
+//   type: Number,
+// },
+exports.TambahDataPersediaan = async (req, res) => {
+  const { funcL, kuantitas, harga, tanggal } = req.body;
+  // console.log("tahun", new Date().getFullYear());
+  const tahun = new Date(tanggal).getFullYear().toString();
+  // console.log("tanggal", new Date(tanggal).getFullYear().toString());
+
+  let jumlah = kuantitas * harga;
+  const data = new Persediaan({
+    funcL,
+    kuantitas,
+    harga,
+    tanggal,
+    tahun,
+    jumlah,
   });
   data.save();
   return res.status(201).json({
@@ -204,3 +245,22 @@ exports.PostSPecData = async (req, res) => {
 //     });
 //   }
 // };
+exports.getAllDataPersediaan = async (req, res) => {
+  // console.log(req.params.lb);
+  const data = await Persediaan.find();
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil",
+    data: data,
+  });
+};
+exports.getAllDataPersediaanSpec = async (req, res) => {
+  // console.log(req.params.funcL);
+  // req.params.funcL
+  const data = await Persediaan.find({ funcL: `${req.params.funcL}` });
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil",
+    data: data,
+  });
+};

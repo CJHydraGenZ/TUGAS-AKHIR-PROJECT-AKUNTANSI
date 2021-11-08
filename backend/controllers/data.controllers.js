@@ -6,6 +6,7 @@ const Persediaan = require("../models/persediaan.model");
 const DataPersediaan = require("../models/data.persediaan.model");
 const { data_laba_rugi } = require("../functions/data_laba_rugi");
 const { data_neraca } = require("../functions/data_neraca");
+const { unique } = require("../functions/uniqueArray");
 
 exports.TambahData = async (req, res) => {
   const { funcL, item, jumlahHarga, tanggal } = req.body;
@@ -268,12 +269,17 @@ exports.PostSPecData = async (req, res) => {
 // };
 exports.getAllDataPersediaan = async (req, res) => {
   // console.log(req.params.lb);
-  const data = await Persediaan.find();
+  const tahun = new Date().getFullYear().toString();
 
+  const data = await Persediaan.find({ tahun });
+  const swif = unique(data);
   return res.status(200).json({
     status: true,
     msg: "berhasil",
-    data: data,
+    data: {
+      data,
+      swif,
+    },
   });
 };
 exports.getAllDataPersediaanSpec = async (req, res) => {

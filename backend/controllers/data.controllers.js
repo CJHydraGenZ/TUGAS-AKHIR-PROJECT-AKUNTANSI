@@ -7,6 +7,7 @@ const DataPersediaan = require("../models/data.persediaan.model");
 const { data_laba_rugi } = require("../functions/data_laba_rugi");
 const { data_neraca } = require("../functions/data_neraca");
 const { unique } = require("../functions/uniqueArray");
+const { kuantitas } = require("../functions/reduce");
 
 exports.TambahData = async (req, res) => {
   const { funcL, item, jumlahHarga, tanggal } = req.body;
@@ -272,16 +273,39 @@ exports.getAllDataPersediaan = async (req, res) => {
   const tahun = new Date().getFullYear().toString();
 
   const data = await Persediaan.find({ tahun });
+  const penjualan = await Persediaan.find({
+    tahun,
+    funcL: `penjualan`,
+  });
+  const pembelian = await Persediaan.find({
+    tahun,
+    funcL: `pembelian`,
+  });
+
+  const totalPembelian = kuantitas(pembelian);
+  const totalPenjualan = kuantitas(penjualan);
+
   const swif = unique(data);
+
   return res.status(200).json({
     status: true,
     msg: "berhasil",
     data: {
-      data,
-      swif,
+      persediaan: {
+        pembelian: {
+          data: pembelian,
+          total: totalPembelian,
+        },
+        penjualan: {
+          data: penjualan,
+          total: totalPenjualan,
+        },
+        swif: swif,
+      },
     },
   });
 };
+
 exports.getAllDataPersediaanSpec = async (req, res) => {
   console.log(req.params.funcL);
   // req.params.funcL
@@ -294,14 +318,31 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
     persediaanName: `${req.params.funcL}`,
     funcL: `pembelian`,
   });
+
+  const totalPembelian = kuantitas(pembelian);
+  const totalPenjualan = kuantitas(penjualan);
+
   return res.status(200).json({
     status: true,
     msg: "berhasil",
     data: {
-      [req.params.funcL]: {
-        penjualan,
-        pembelian,
+      persediaan: {
+        pembelian: {
+          data: pembelian,
+          total: totalPembelian,
+        },
+        penjualan: {
+          data: penjualan,
+          total: totalPenjualan,
+        },
       },
     },
   });
 };
+//!ini versi bagusnya
+// data: {
+//   [req.params.funcL]: {
+//     penjualan,
+//     pembelian,
+//   },
+// },

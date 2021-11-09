@@ -1,18 +1,35 @@
 const express = require("express");
 // const { validationResult } = require("express-validator");
 const router = express.Router();
+// const {
+//   TambahData,
+//   TambahDataPersediaan,
+//   getData,
+//   getAllData,
+//   updateData,
+//   deleteData,
+//   getSPecData,
+//   PostSPecData,
+//   getAllDataPersediaan,
+//   getAllDataPersediaanSpec,
+//   updateDataPersediaan,
+// } = require("../controllers/data.controllers");
 const {
   TambahData,
-  TambahDataPersediaan,
-  getData,
   getAllData,
-  updateData,
-  deleteData,
+  getData,
   getSPecData,
+  deleteData,
+  updateData,
   PostSPecData,
-  getAllDataPersediaan,
+} = require("../controllers/laba.rugi.controllers");
+const {
+  TambahDataPersediaan,
   getAllDataPersediaanSpec,
-} = require("../controllers/data.controllers");
+  updateDataPersediaan,
+  deleteDataPersediaan,
+  getAllDataPersediaan,
+} = require("../controllers/persediaan.controllers");
 const {
   runValidaton,
   validationTambahData,
@@ -20,7 +37,7 @@ const {
 } = require("../validation/index");
 const middleware = require("../middleware/middleware");
 
-router.post("/tambah", middleware, validationTambahData, TambahData);
+//?persediaan
 router.post(
   "/persediaan",
   middleware,
@@ -29,9 +46,12 @@ router.post(
 );
 router.get("/persediaan", middleware, getAllDataPersediaan);
 router.get("/persediaan/:funcL", middleware, getAllDataPersediaanSpec);
+router.put("/persediaan/:upt", middleware, updateDataPersediaan);
+router.delete("/persediaan/:upt", middleware, deleteDataPersediaan);
 // router.get("/persediaan/:penjualan", middleware, getAllDataPersediaanSpec);
 // router.get("/persediaan", middleware, getAllDataPersediaan);
-
+//? laba rugi
+router.post("/tambah", middleware, validationTambahData, TambahData);
 router.get("/lb/:lb", middleware, getData);
 router.get("/lb", middleware, getAllData);
 router.get("/spec", middleware, getSPecData);

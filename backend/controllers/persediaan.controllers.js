@@ -1,5 +1,5 @@
 require("dotenv").config();
-const Data = require("../models/data.model");
+// const Data = require("../models/data.model");
 
 const Persediaan = require("../models/persediaan.model");
 const DataPersediaan = require("../models/data.persediaan.model");
@@ -12,7 +12,7 @@ exports.TambahDataPersediaan = async (req, res) => {
   // console.log("tahun", new Date().getFullYear());
   const tahun = new Date(tanggal).getFullYear().toString();
   // console.log("tanggal", new Date(tanggal).getFullYear().toString());
-  console.log(persediaanName);
+  console.log(persediaanName, funcL, kuantitas, harga);
 
   let jumlah = kuantitas * harga;
   const data = new Persediaan({
@@ -55,8 +55,8 @@ exports.updateDataPersediaan = async (req, res) => {
   console.log(req.params.upt);
   // const { funcL, item, jumlahHarga, tanggal } = req.body;
   const { persediaanName, funcL, kuantitas, harga, tanggal } = req.body;
-
-  const data = await Data.findByIdAndUpdate(
+  // console.log(kuantitas, harga, tanggal);
+  const data = await Persediaan.findByIdAndUpdate(
     { _id: `${req.params.upt}` },
     {
       $set: {
@@ -82,10 +82,11 @@ exports.updateDataPersediaan = async (req, res) => {
     code: "update",
   });
 };
+
 exports.deleteDataPersediaan = async (req, res) => {
   console.log(req.params.upt);
   // const { funcL, item, jumlahHarga, total } = req.body;
-  const data = await Data.findByIdAndRemove(
+  const data = await Persediaan.findByIdAndRemove(
     { _id: `${req.params.upt}` },
 
     (err, docs) => {
@@ -104,6 +105,28 @@ exports.deleteDataPersediaan = async (req, res) => {
   });
 };
 
+// exports.updateData = async (req, res) => {
+//   console.log(req.params.up);
+//   const { funcL, item, jumlahHarga, tanggal } = req.body;
+//   const data = await Data.findByIdAndUpdate(
+//     { _id: `${req.params.up}` },
+//     {
+//       $set: {
+//         item: item,
+//         jumlahHarga: jumlahHarga,
+//         tanggal: tanggal,
+//       },
+//     },
+//     { useFindAndModify: false },
+//     (err, docs) => {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         console.log("Updated User : ", docs);
+//       }
+//     }
+//   );
+// }
 exports.getAllDataPersediaan = async (req, res) => {
   // console.log(req.params.lb);
   const tahun = new Date().getFullYear().toString();

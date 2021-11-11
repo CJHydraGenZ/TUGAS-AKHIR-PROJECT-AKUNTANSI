@@ -7,6 +7,9 @@ const persediaanSchema = mongoose.Schema({
   funcL: {
     type: String,
   },
+  namaP: {
+    type: String,
+  },
   kuantitas: {
     type: Number,
   },

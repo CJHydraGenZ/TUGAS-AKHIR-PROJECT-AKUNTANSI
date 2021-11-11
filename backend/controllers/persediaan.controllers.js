@@ -8,7 +8,7 @@ const { unique } = require("../functions/uniqueArray");
 const { kuantitas } = require("../functions/reduce");
 
 exports.TambahDataPersediaan = async (req, res) => {
-  const { persediaanName, funcL, kuantitas, harga, tanggal } = req.body;
+  const { persediaanName, funcL, namaP, kuantitas, harga, tanggal } = req.body;
   // console.log("tahun", new Date().getFullYear());
   const tahun = new Date(tanggal).getFullYear().toString();
   // console.log("tanggal", new Date(tanggal).getFullYear().toString());
@@ -18,6 +18,7 @@ exports.TambahDataPersediaan = async (req, res) => {
   const data = new Persediaan({
     persediaanName,
     funcL,
+    namaP,
     kuantitas,
     harga,
     tanggal,
@@ -54,12 +55,13 @@ exports.TambahDataPersediaan = async (req, res) => {
 exports.updateDataPersediaan = async (req, res) => {
   console.log(req.params.upt);
   // const { funcL, item, jumlahHarga, tanggal } = req.body;
-  const { persediaanName, funcL, kuantitas, harga, tanggal } = req.body;
+  const { persediaanName, funcL, namaP, kuantitas, harga, tanggal } = req.body;
   // console.log(kuantitas, harga, tanggal);
   const data = await Persediaan.findByIdAndUpdate(
     { _id: `${req.params.upt}` },
     {
       $set: {
+        namaP: namaP,
         kuantitas: kuantitas,
         harga: harga,
         tanggal: tanggal,
@@ -205,3 +207,9 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
 //     pembelian,
 //   },
 // },
+
+// ! rumus penjualan
+// ? akan di kerjakan nanti
+// jika ada harga berbeda maka harga yang di pakai adalah yang terkercil
+//terus kuantitas dari harga terkecil akan terus dikurang sampai 0
+//jika sampai 0 maka di pakai harga yang lebih besar

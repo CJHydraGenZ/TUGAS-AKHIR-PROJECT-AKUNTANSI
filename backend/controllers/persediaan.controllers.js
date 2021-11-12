@@ -34,12 +34,17 @@ exports.TambahDataPersediaan = async (req, res) => {
     persediaanName: `${req.params.funcL}`,
     funcL: `pembelian`,
   });
+  const piutang = await Persediaan.find({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `piutang`,
+  });
   const data_persediaan = new DataPersediaan({
     // persediaanName,
     persediaanData: {
       [persediaanName]: {
         penjualan,
         pembelian,
+        piutang,
       },
     },
   });
@@ -142,9 +147,14 @@ exports.getAllDataPersediaan = async (req, res) => {
     tahun,
     funcL: `pembelian`,
   });
+  const piutang = await Persediaan.find({
+    tahun,
+    funcL: `piutang`,
+  });
 
   const totalPembelian = kuantitas(pembelian);
   const totalPenjualan = kuantitas(penjualan);
+  const totalPiutang = kuantitas(piutang);
 
   const swif = unique(data);
 
@@ -160,6 +170,10 @@ exports.getAllDataPersediaan = async (req, res) => {
         penjualan: {
           data: penjualan,
           total: totalPenjualan,
+        },
+        piutang: {
+          data: piutang,
+          total: totalPiutang,
         },
         swif: swif,
       },
@@ -179,9 +193,14 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
     persediaanName: `${req.params.funcL}`,
     funcL: `pembelian`,
   });
+  const piutang = await Persediaan.find({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `piutang`,
+  });
 
   const totalPembelian = kuantitas(pembelian);
   const totalPenjualan = kuantitas(penjualan);
+  const totalPiutang = kuantitas(piutang);
 
   return res.status(200).json({
     status: true,
@@ -195,6 +214,10 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
         penjualan: {
           data: penjualan,
           total: totalPenjualan,
+        },
+        piutang: {
+          data: piutang,
+          total: totalPiutang,
         },
       },
     },

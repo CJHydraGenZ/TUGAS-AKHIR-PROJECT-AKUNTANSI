@@ -147,6 +147,33 @@ exports.getAllDataPersediaan = async (req, res) => {
     tahun,
     funcL: `pembelian`,
   });
+  const pembelianAwal = await Persediaan.aggregate([
+    {
+      // tahun,
+      // funcL: `pembelian`,
+      $group: {
+        _id: null,
+        first: { $first: "$$ROOT" },
+        last: { $last: "$$ROOT" },
+      },
+    },
+  ]);
+  // const pembelianAwal = await Persediaan.find({
+  //   tahun,
+  //   funcL: `pembelian`,
+  //   tanggal: "$$ROOT",
+  //   // first: { $first: "$$ROOT" },
+  //   // last: { $last: "$$ROOT" },
+  // });
+
+  // aggregate({
+  //   ...    $group: {
+  //   ...       _id: null,
+  //   ...       first: { $first: "$$ROOT" },
+  //   ...       last: { $last: "$$ROOT" }
+  //   ...    }
+  //   ... }
+  //   ... );
   const piutang = await Persediaan.find({
     tahun,
     funcL: `piutang`,
@@ -157,6 +184,7 @@ exports.getAllDataPersediaan = async (req, res) => {
   const totalPiutang = kuantitas(piutang);
 
   const swif = unique(data);
+  //! buat saldo disini
 
   return res.status(200).json({
     status: true,
@@ -174,6 +202,10 @@ exports.getAllDataPersediaan = async (req, res) => {
         piutang: {
           data: piutang,
           total: totalPiutang,
+        },
+        saldo: {
+          kuantitas: totalPembelian - totalPenjualan,
+          dataAwal: pembelianAwal,
         },
         swif: swif,
       },

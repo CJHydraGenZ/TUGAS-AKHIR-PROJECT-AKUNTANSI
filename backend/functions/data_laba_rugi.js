@@ -24,7 +24,7 @@ exports.data_laba_rugi = (data) => {
   const { bpeg, totalBPEG } = wraping("bpeg", "totalBPEG", data);
   const { bk, totalBK } = wraping("bk", "totalBK", data);
   const { bpen, totalBPEN } = wraping("bpen", "totalBPEN", data);
-  const { pl, totalPL } = wraping("pl", "totalBL", data);
+  const { pl, totalPL } = wraping("pl", "totalPL", data);
   const { bl, totalBL } = wraping("bl", "totalBL", data);
   // console.log("ini res", tpu);
   //? neraca
@@ -53,6 +53,36 @@ exports.data_laba_rugi = (data) => {
   let LR2 = totalBPEG + totalBK + totalBPEN;
   let LR3 = totalBL - totalPL;
   let LABA_RUGI = LR1 - LR2 + LR3;
+  const grafLaba = [
+    {
+      name: "Page A",
+      total: 4000,
+    },
+    {
+      name: "Page B",
+      total: 3000,
+    },
+    {
+      name: "Page C",
+      total: 2000,
+    },
+    {
+      name: "Page D",
+      total: 2780,
+    },
+    {
+      name: "Page E",
+      total: 1890,
+    },
+    {
+      name: "Page F",
+      total: 2390,
+    },
+    {
+      name: "Page G",
+      total: 3490,
+    },
+  ];
   const LData = {
     laba_rugi: {
       tpu: {
@@ -87,6 +117,36 @@ exports.data_laba_rugi = (data) => {
       LR2: LR2,
       LR3: LR3,
       LABA_RUGI: LABA_RUGI,
+      grafLaba: [
+        {
+          name: "Pendapatan Usaha",
+          total: totalTPU,
+        },
+        {
+          name: "Beban Diluar Usaha",
+          total: totalTBP,
+        },
+        {
+          name: "Beban Pengawai",
+          total: totalBPEG,
+        },
+        {
+          name: "Beban Kantor",
+          total: totalBK,
+        },
+        {
+          name: "Beban Penyusutan",
+          total: totalBPEN,
+        },
+        {
+          name: "Pendapatan lain-lain",
+          total: totalPL,
+        },
+        {
+          name: "Beban lain-lain",
+          total: totalBL,
+        },
+      ],
     },
     neraca: {
       al: {

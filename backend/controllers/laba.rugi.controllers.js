@@ -67,14 +67,20 @@ exports.deleteData = async (req, res) => {
       }
     }
   );
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil di Hapus",
+    code: "delete",
+  });
 };
 exports.getAllData = async (req, res) => {
   // console.log(req.params.lb);
   const data = await Data.find();
+  const LData = data_laba_rugi(data);
   return res.status(200).json({
     status: true,
     msg: "berhasil",
-    data: data,
+    data: LData,
   });
 };
 

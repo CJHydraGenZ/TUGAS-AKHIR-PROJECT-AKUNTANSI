@@ -176,6 +176,32 @@ exports.data_laba_rugi = (data) => {
 
       TOTAL_JUMLAH_ASET,
       TOTAL_KNE,
+      grafNeraca: [
+        {
+          name: "Aset Lancar",
+          total: totalAL,
+        },
+        {
+          name: "Aset Tidak Lancar",
+          total: totalATL,
+        },
+        {
+          name: "Aset Tetap",
+          total: totalAT,
+        },
+        {
+          name: "Kewajiban Lancar",
+          total: totalKL,
+        },
+        {
+          name: "Kewajiban Jangka Panjang",
+          total: totalKJP,
+        },
+        {
+          name: "Ekuitas",
+          total: totalEKUITAS,
+        },
+      ],
     },
     lap_keuangan: {
       kdsk: {
@@ -214,7 +240,173 @@ exports.data_laba_rugi = (data) => {
         data: up,
         total: totalUP,
       },
+      grafLap_keuangan: [
+        {
+          name: "Kas dan Setara Kas",
+          total: totalKDSK,
+        },
+        {
+          name: "Piutang Dagang",
+          total: totalPD,
+        },
+        {
+          name: "Piutang Lain-lain",
+          total: totalPIL,
+        },
+        {
+          name: "Persediaan",
+          total: totalPER,
+        },
+        {
+          name: "Uang Muka",
+          total: totalUM,
+        },
+        {
+          name: "Utang Usaha",
+          total: totalUU,
+        },
+        {
+          name: "Dana Titipan",
+          total: totalDT,
+        },
+        {
+          name: "Utang Leasing",
+          total: totalUL,
+        },
+        {
+          name: "Utang Pajak",
+          total: totalUP,
+        },
+      ],
     },
+  };
+  return LData;
+};
+
+exports.dataGraf = (data) => {
+  //? laba rugi
+  const { tpu, totalTPU } = wraping("tpu", "totalTPU", data);
+  const { tbp, totalTBP } = wraping("tbp", "totalTBP", data);
+  const { bpeg, totalBPEG } = wraping("bpeg", "totalBPEG", data);
+  const { bk, totalBK } = wraping("bk", "totalBK", data);
+  const { bpen, totalBPEN } = wraping("bpen", "totalBPEN", data);
+  const { pl, totalPL } = wraping("pl", "totalPL", data);
+  const { bl, totalBL } = wraping("bl", "totalBL", data);
+  // console.log("ini res", tpu);
+  //? neraca
+  const { al, totalAL } = wraping("al", "totalAL", data); //!  untuk aset tetap rumusnya beda
+  const { atl, totalATL } = wraping("atl", "totalATL", data);
+  const { at, totalAT } = wraping("at", "totalAT", data);
+  const { kl, totalKL } = wraping("kl", "totalKL", data);
+  const { kjp, totalKJP } = wraping("kjp", "totalKJP", data);
+  const { ekuitas, totalEKUITAS } = wraping("ekuitas", "totalEKUITAS", data);
+
+  //? lap. keuangan
+  const { kdsk, totalKDSK } = wraping("kdsk", "totalKDSK", data);
+  const { pd, totalPD } = wraping("pd", "totalPD", data);
+  const { pil, totalPIL } = wraping("pil", "totalPIL", data);
+  const { per, totalPER } = wraping("per", "totalPER", data);
+  const { um, totalUM } = wraping("um", "totalUM", data);
+  const { uu, totalUU } = wraping("uu", "totalUU", data);
+  const { dt, totalDT } = wraping("dt", "totalDT", data);
+  const { ul, totalUL } = wraping("ul", "totalUL", data);
+  const { up, totalUP } = wraping("up", "totalUP", data);
+
+  const LData = {
+    grafLaba: [
+      {
+        name: "Pendapatan Usaha",
+        total: totalTPU,
+      },
+      {
+        name: "Beban Diluar Usaha",
+        total: totalTBP,
+      },
+      {
+        name: "Beban Pengawai",
+        total: totalBPEG,
+      },
+      {
+        name: "Beban Kantor",
+        total: totalBK,
+      },
+      {
+        name: "Beban Penyusutan",
+        total: totalBPEN,
+      },
+      {
+        name: "Pendapatan lain-lain",
+        total: totalPL,
+      },
+      {
+        name: "Beban lain-lain",
+        total: totalBL,
+      },
+    ],
+    grafNeraca: [
+      {
+        name: "Aset Lancar",
+        total: totalAL,
+      },
+      {
+        name: "Aset Tidak Lancar",
+        total: totalATL,
+      },
+      {
+        name: "Aset Tetap",
+        total: totalAT,
+      },
+      {
+        name: "Kewajiban Lancar",
+        total: totalKL,
+      },
+      {
+        name: "Kewajiban Jangka Panjang",
+        total: totalKJP,
+      },
+      {
+        name: "Ekuitas",
+        total: totalEKUITAS,
+      },
+    ],
+    grafLap_keuangan: [
+      {
+        name: "Kas dan Setara Kas",
+        total: totalKDSK,
+      },
+      {
+        name: "Piutang Dagang",
+        total: totalPD,
+      },
+      {
+        name: "Piutang Lain-lain",
+        total: totalPIL,
+      },
+      {
+        name: "Persediaan",
+        total: totalPER,
+      },
+      {
+        name: "Uang Muka",
+        total: totalUM,
+      },
+      {
+        name: "Utang Usaha",
+        total: totalUU,
+      },
+      {
+        name: "Dana Titipan",
+        total: totalDT,
+      },
+      {
+        name: "Utang Leasing",
+        total: totalUL,
+      },
+      {
+        name: "Utang Pajak",
+        total: totalUP,
+      },
+    ],
   };
   return LData;
 };

@@ -19,6 +19,7 @@ const {
   getAllData,
   getData,
   getSPecData,
+  getGraf,
   deleteData,
   updateData,
   PostSPecData,
@@ -54,6 +55,7 @@ router.delete("/persediaan/:upt", middleware, deleteDataPersediaan);
 router.post("/tambah", middleware, validationTambahData, TambahData);
 router.get("/lb/:lb", middleware, getData);
 router.get("/lb", middleware, getAllData);
+router.get("/graf", middleware, getGraf);
 router.get("/spec", middleware, getSPecData);
 router.post("/spec", middleware, PostSPecData);
 router.put("/lb/:up", middleware, updateData);

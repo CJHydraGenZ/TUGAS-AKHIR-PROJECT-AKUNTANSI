@@ -2,7 +2,7 @@ require("dotenv").config();
 const Data = require("../models/data.model");
 const Laba = require("../models/laba.model");
 
-const { data_laba_rugi } = require("../functions/data_laba_rugi");
+const { data_laba_rugi, dataGraf } = require("../functions/data_laba_rugi");
 
 exports.TambahData = async (req, res) => {
   const { funcL, item, jumlahHarga, tanggal } = req.body;
@@ -77,6 +77,16 @@ exports.getAllData = async (req, res) => {
   // console.log(req.params.lb);
   const data = await Data.find();
   const LData = data_laba_rugi(data);
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil",
+    data: LData,
+  });
+};
+exports.getGraf = async (req, res) => {
+  // console.log(req.params.lb);
+  const data = await Data.find();
+  const LData = dataGraf(data);
   return res.status(200).json({
     status: true,
     msg: "berhasil",

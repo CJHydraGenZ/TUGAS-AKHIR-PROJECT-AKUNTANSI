@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
+  nama: {
+    type: String,
+  },
   username: {
     type: String,
   },
@@ -12,6 +15,33 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
+  },
+  jenis_kelamin: {
+    type: String,
+  },
+  alamat: {
+    type: String,
+  },
+  last_login: {
+    userId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User",
+    },
+    nama: {
+      type: String,
+    },
+    times: {
+      type: Date,
+      // default: () => Date.now(),
+    },
+  },
+
+  status: {
+    type: Boolean,
+  },
+  createAt: {
+    type: Date,
+    // default: () => Date.now(),
   },
 });
 

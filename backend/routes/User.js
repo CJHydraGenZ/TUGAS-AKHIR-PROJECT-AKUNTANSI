@@ -16,7 +16,7 @@ const {
 const middleware = require("../middleware/middleware");
 
 //user
-router.post("/daftar", validationDaftar, runValidaton, DaftarUser);
+router.post("/daftar", validationDaftar, middleware, runValidaton, DaftarUser);
 router.post("/login", validationLogin, runValidaton, LoginUser);
 router.get("/user", middleware, getSingleUser);
 

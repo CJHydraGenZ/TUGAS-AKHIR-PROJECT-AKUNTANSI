@@ -3,7 +3,17 @@ const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 exports.DaftarUser = async (req, res) => {
-  const { username, email, userlevel, password } = req.body;
+  const {
+    nama,
+    username,
+    email,
+    userlevel,
+    password,
+    jenis_kelamin,
+    alamat,
+    last_login,
+    status,
+  } = req.body;
 
   const emailUser = await User.findOne({
     email: email,
@@ -26,10 +36,15 @@ exports.DaftarUser = async (req, res) => {
   }
 
   const user = new User({
+    nama,
     username,
     email,
     userlevel,
     password: await bcrypt.hash(password, 10),
+    jenis_kelamin,
+    alamat,
+    status,
+    createAt: Date.now(),
   });
   user.save();
   return res.status(201).json({
@@ -44,6 +59,7 @@ exports.LoginUser = async (req, res) => {
   const dataUser = await User.findOne({
     $or: [{ username: username }, { email: username }],
   });
+  console.log("ini id", dataUser._id);
 
   if (dataUser) {
     const passwordUser = await bcrypt.compare(password, dataUser.password);
@@ -55,6 +71,31 @@ exports.LoginUser = async (req, res) => {
       const user = await User.findOne({
         $or: [{ username: username }, { email: username }],
       });
+
+      // const time_login = new User({
+      //   // _id: `${dataUser._id}`
+
+      //   last_login: {
+      //     nama: dataUser.nama,
+      //     userId: `${dataUser._id}`,
+      //     last_login: Date.now(),
+      //   },
+      // });
+      // time_login.save();
+      await User.findByIdAndUpdate(
+        {
+          _id: `${dataUser._id}`,
+        },
+        {
+          $push: {
+            last_login: {
+              userId: `${dataUser._id}`,
+              nama: dataUser.nama,
+              times: Date.now(),
+            },
+          },
+        }
+      );
       return res.status(200).json({
         status: true,
         msg: "User berhasil login!",

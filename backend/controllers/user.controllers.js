@@ -59,8 +59,8 @@ exports.LoginUser = async (req, res) => {
   const dataUser = await User.findOne({
     $or: [{ username: username }, { email: username }],
   });
-  console.log("ini id", dataUser._id);
-
+  // console.log("ini id", dataUser._id);
+  // console.log("ini data user", dataUser);
   if (dataUser) {
     const passwordUser = await bcrypt.compare(password, dataUser.password);
     if (passwordUser) {
@@ -105,13 +105,15 @@ exports.LoginUser = async (req, res) => {
     } else {
       return res.status(404).json({
         status: false,
-        msg: "password tidak sama ",
+
+        password: "password tidak sama ",
       });
     }
   } else {
     return res.status(404).json({
       status: false,
-      msg: "username atau email tidak tersedia",
+
+      username: "username atau email tidak tersedia",
     });
   }
 };

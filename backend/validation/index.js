@@ -5,7 +5,8 @@ exports.runValidaton = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(404).json({
       status: false,
-      msg: errors.array()[0].msg,
+
+      [errors.array()[0].param]: errors.array()[0].msg,
     });
   }
   next();

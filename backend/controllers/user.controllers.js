@@ -23,15 +23,15 @@ exports.DaftarUser = async (req, res) => {
   });
   if (usernameUser) {
     return res.status(404).json({
-      status: false,
-      msg: "username sudah tersedia!",
+      // status: false,
+      username: "username sudah tersedia!",
     });
   }
 
   if (emailUser) {
     return res.status(404).json({
-      status: false,
-      msg: "email sudah tersedia!",
+      // status: false,
+      email: "email sudah tersedia!",
     });
   }
 
@@ -48,7 +48,7 @@ exports.DaftarUser = async (req, res) => {
   });
   user.save();
   return res.status(201).json({
-    status: true,
+    // status: true,
     msg: "Berasil daftar",
   });
 };

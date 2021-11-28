@@ -4,7 +4,7 @@ exports.runValidaton = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(404).json({
-      status: false,
+      // status: false,
 
       [errors.array()[0].param]: errors.array()[0].msg,
     });
@@ -23,6 +23,10 @@ exports.validationDaftar = [
     .notEmpty()
     .isLength({ min: 6 })
     .withMessage("password minimal 6 karakter"),
+  check("nama", "nama tidak boleh kosong").notEmpty(),
+  check("jenis_kelamin", "jenis kelamin tidak boleh kosong").notEmpty(),
+  check("alamat", "Alamat tidak boleh kosong").notEmpty(),
+
   // .isStrongPassword()
   // .withMessage("password harus terdiri dari simbol hurup besar dan angka"),
 ];

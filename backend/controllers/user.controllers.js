@@ -72,26 +72,6 @@ exports.LoginUser = async (req, res) => {
         $or: [{ username: username }, { email: username }],
       });
 
-      // const time_login = new User({
-      //   // _id: `${dataUser._id}`
-
-      //   last_login: {
-      //     nama: dataUser.nama,
-      //     userId: `${dataUser._id}`,
-      //     last_login: Date.now(),
-      //   },
-      // });
-      // time_login.save();
-      // await User.findByIdAndUpdate(
-      //   {
-      //     _id: `${dataUser._id}`,
-      //   },
-      //   {
-      //     $set: {
-      //       last_login: Date.now(),
-      //     },
-      //   }
-      // );
       await User.findByIdAndUpdate(
         {
           _id: `${dataUser._id}`,
@@ -132,6 +112,63 @@ exports.LoginUser = async (req, res) => {
   }
 };
 
+exports.updateUser = async (req, res) => {
+  console.log(req.params.uid);
+  // const { funcL, item, jumlahHarga, tanggal } = req.body;
+  const { email, userlevel, password, nama, jenis_kelamin, alamat } = req.body;
+  // console.log(kuantitas, harga, tanggal);
+  const data = await User.findByIdAndUpdate(
+    { _id: `${req.params.uid}` },
+    {
+      $set: {
+        email: email,
+        userlevel: userlevel,
+        password: password,
+        nama: nama,
+        jenis_kelamin: jenis_kelamin,
+        alamat: alamat,
+      },
+    },
+    { useFindAndModify: false },
+    (err, docs) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated User : ", docs);
+      }
+    }
+  );
+  // console.log(data);
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil di Update",
+    data: data,
+    code: "update",
+  });
+};
+
+exports.deleteUser = async (req, res) => {
+  console.log(req.params.uid);
+  // const { funcL, item, jumlahHarga, total } = req.body;
+  const data = await User.findByIdAndRemove(
+    { _id: `${req.params.uid}` },
+
+    (err, docs) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("delete User : ", docs);
+      }
+    }
+  );
+  // console.log(data);
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil di Hapus",
+    code: "delete",
+  });
+};
+
 exports.getUser = async (req, res) => {
   const user = await User.find();
   return res.status(200).json({
@@ -140,35 +177,3 @@ exports.getUser = async (req, res) => {
     data: user,
   });
 };
-// const rows = [
-//   {
-//     id: 1,
-//     nama: randomTraderName(),
-//     dateCreated: randomCreatedDate(),
-//     lastLogin: randomUpdatedDate(),
-//   },
-//   {
-//     id: 2,
-//     nama: randomTraderName(),
-//     dateCreated: randomCreatedDate(),
-//     lastLogin: randomUpdatedDate(),
-//   },
-//   {
-//     id: 3,
-//     nama: randomTraderName(),
-//     dateCreated: randomCreatedDate(),
-//     lastLogin: randomUpdatedDate(),
-//   },
-//   {
-//     id: 4,
-//     nama: randomTraderName(),
-//     dateCreated: randomCreatedDate(),
-//     lastLogin: randomUpdatedDate(),
-//   },
-//   {
-//     id: 5,
-//     nama: randomTraderName(),
-//     dateCreated: randomCreatedDate(),
-//     lastLogin: randomUpdatedDate(),
-//   },
-// ];

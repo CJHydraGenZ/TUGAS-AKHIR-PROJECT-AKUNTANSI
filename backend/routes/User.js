@@ -5,6 +5,8 @@ const {
   DaftarUser,
   LoginUser,
   getUser,
+  updateUser,
+  deleteUser,
 } = require("../controllers/user.controllers");
 // const { TambahData, getData } = require("../controllers/data.controllers");
 const {
@@ -18,6 +20,8 @@ const middleware = require("../middleware/middleware");
 //user
 router.post("/daftar", validationDaftar, middleware, runValidaton, DaftarUser);
 router.post("/login", validationLogin, runValidaton, LoginUser);
+router.put("/user/:uid", middleware, updateUser);
+router.delete("/user/:uid", middleware, deleteUser);
 router.get("/user", middleware, getUser);
 
 // //data

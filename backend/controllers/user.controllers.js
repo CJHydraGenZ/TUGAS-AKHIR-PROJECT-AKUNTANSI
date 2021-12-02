@@ -82,18 +82,32 @@ exports.LoginUser = async (req, res) => {
       //   },
       // });
       // time_login.save();
+      // await User.findByIdAndUpdate(
+      //   {
+      //     _id: `${dataUser._id}`,
+      //   },
+      //   {
+      //     $set: {
+      //       last_login: Date.now(),
+      //     },
+      //   }
+      // );
       await User.findByIdAndUpdate(
         {
           _id: `${dataUser._id}`,
         },
         {
-          $push: {
-            last_login: {
-              userId: `${dataUser._id}`,
-              nama: dataUser.nama,
-              times: Date.now(),
-            },
+          $set: {
+            last_login: Date.now(),
           },
+        },
+        { useFindAndModify: false },
+        (err, docs) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("Updated User : ", docs);
+          }
         }
       );
       return res.status(200).json({
@@ -118,11 +132,43 @@ exports.LoginUser = async (req, res) => {
   }
 };
 
-exports.getSingleUser = async (req, res) => {
-  const user = await User.findOne({ _id: req.id });
+exports.getUser = async (req, res) => {
+  const user = await User.find();
   return res.status(200).json({
     status: true,
     msg: "berhasil",
     data: user,
   });
 };
+// const rows = [
+//   {
+//     id: 1,
+//     nama: randomTraderName(),
+//     dateCreated: randomCreatedDate(),
+//     lastLogin: randomUpdatedDate(),
+//   },
+//   {
+//     id: 2,
+//     nama: randomTraderName(),
+//     dateCreated: randomCreatedDate(),
+//     lastLogin: randomUpdatedDate(),
+//   },
+//   {
+//     id: 3,
+//     nama: randomTraderName(),
+//     dateCreated: randomCreatedDate(),
+//     lastLogin: randomUpdatedDate(),
+//   },
+//   {
+//     id: 4,
+//     nama: randomTraderName(),
+//     dateCreated: randomCreatedDate(),
+//     lastLogin: randomUpdatedDate(),
+//   },
+//   {
+//     id: 5,
+//     nama: randomTraderName(),
+//     dateCreated: randomCreatedDate(),
+//     lastLogin: randomUpdatedDate(),
+//   },
+// ];

@@ -23,17 +23,7 @@ const userSchema = mongoose.Schema({
     type: String,
   },
   last_login: {
-    userId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
-    },
-    nama: {
-      type: String,
-    },
-    times: {
-      type: Date,
-      // default: () => Date.now(),
-    },
+    type: Date,
   },
 
   status: {

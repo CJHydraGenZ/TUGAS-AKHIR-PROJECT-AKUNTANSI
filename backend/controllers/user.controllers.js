@@ -116,29 +116,29 @@ exports.updateUser = async (req, res) => {
   console.log(req.params.uid);
   // const { funcL, item, jumlahHarga, tanggal } = req.body;
   console.log(req.body);
-  // const { email, userlevel, password, nama, jenis_kelamin, alamat } = req.body;
+  const { email, userlevel, password, nama, jenis_kelamin, alamat } = req.body;
   // console.log(kuantitas, harga, tanggal);
-  // const data = await User.findByIdAndUpdate(
-  //   { _id: `${req.params.uid}` },
-  //   {
-  //     $set: {
-  //       email: email,
-  //       userlevel: userlevel,
-  //       password: password,
-  //       nama: nama,
-  //       jenis_kelamin: jenis_kelamin,
-  //       alamat: alamat,
-  //     },
-  //   },
-  //   { useFindAndModify: false },
-  //   (err, docs) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       console.log("Updated User : ", docs);
-  //     }
-  //   }
-  // );
+  const data = await User.findByIdAndUpdate(
+    { _id: `${req.params.uid}` },
+    {
+      $set: {
+        email: email,
+        userlevel: userlevel,
+        password: password,
+        nama: nama,
+        jenis_kelamin: jenis_kelamin,
+        alamat: alamat,
+      },
+    },
+    { useFindAndModify: false },
+    (err, docs) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated User : ", docs);
+      }
+    }
+  );
   // console.log(data);
   return res.status(200).json({
     status: true,

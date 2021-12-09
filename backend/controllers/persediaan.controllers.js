@@ -8,7 +8,16 @@ const { unique } = require("../functions/uniqueArray");
 const { kuantitas } = require("../functions/reduce");
 
 exports.TambahDataPersediaan = async (req, res) => {
-  const { persediaanName, funcL, namaP, kuantitas, harga, tanggal } = req.body;
+  const {
+    kategori,
+    persediaanName,
+    funcL,
+    namaP,
+    kuantitas,
+    satuan,
+    harga,
+    tanggal,
+  } = req.body;
   // console.log("tahun", new Date().getFullYear());
   const tahun = new Date(tanggal).getFullYear().toString();
   // console.log("tanggal", new Date(tanggal).getFullYear().toString());
@@ -16,10 +25,12 @@ exports.TambahDataPersediaan = async (req, res) => {
 
   let jumlah = kuantitas * harga;
   const data = new Persediaan({
+    kategori,
     persediaanName,
     funcL,
     namaP,
     kuantitas,
+    satuan,
     harga,
     tanggal,
     tahun,
@@ -147,33 +158,7 @@ exports.getAllDataPersediaan = async (req, res) => {
     tahun,
     funcL: `pembelian`,
   });
-  const pembelianAwal = await Persediaan.aggregate([
-    {
-      // tahun,
-      // funcL: `pembelian`,
-      $group: {
-        _id: null,
-        first: { $first: "$$ROOT" },
-        last: { $last: "$$ROOT" },
-      },
-    },
-  ]);
-  // const pembelianAwal = await Persediaan.find({
-  //   tahun,
-  //   funcL: `pembelian`,
-  //   tanggal: "$$ROOT",
-  //   // first: { $first: "$$ROOT" },
-  //   // last: { $last: "$$ROOT" },
-  // });
 
-  // aggregate({
-  //   ...    $group: {
-  //   ...       _id: null,
-  //   ...       first: { $first: "$$ROOT" },
-  //   ...       last: { $last: "$$ROOT" }
-  //   ...    }
-  //   ... }
-  //   ... );
   const piutang = await Persediaan.find({
     tahun,
     funcL: `piutang`,
@@ -198,15 +183,14 @@ exports.getAllDataPersediaan = async (req, res) => {
         penjualan: {
           data: penjualan,
           total: totalPenjualan,
+          // kuantitas: totalPembelian - totalPenjualan,
+          // saldo: saldo,
         },
         piutang: {
           data: piutang,
           total: totalPiutang,
         },
-        saldo: {
-          kuantitas: totalPembelian - totalPenjualan,
-          dataAwal: pembelianAwal,
-        },
+
         swif: swif,
       },
     },
@@ -214,7 +198,7 @@ exports.getAllDataPersediaan = async (req, res) => {
 };
 
 exports.getAllDataPersediaanSpec = async (req, res) => {
-  console.log(req.params.funcL);
+  console.log(req.body);
   // req.params.funcL
   // const data = await Persediaan.find({ funcL: `${req.params.funcL}` });
   const penjualan = await Persediaan.find({
@@ -228,6 +212,11 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
   const piutang = await Persediaan.find({
     persediaanName: `${req.params.funcL}`,
     funcL: `piutang`,
+  });
+
+  const saldo = await Persediaan.findOne({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `pembelian`,
   });
 
   const totalPembelian = kuantitas(pembelian);
@@ -246,6 +235,8 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
         penjualan: {
           data: penjualan,
           total: totalPenjualan,
+          kuantitas: totalPembelian - totalPenjualan,
+          saldo: saldo,
         },
         piutang: {
           data: piutang,
@@ -268,3 +259,16 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
 // jika ada harga berbeda maka harga yang di pakai adalah yang terkercil
 //terus kuantitas dari harga terkecil akan terus dikurang sampai 0
 //jika sampai 0 maka di pakai harga yang lebih besar
+
+exports.getSaldo = async (req, res) => {
+  const pembelian = await Persediaan.findOne({
+    persediaanName: `${req.params.funcL}`,
+    funcL: `pembelian`,
+  });
+
+  return res.status(200).json({
+    status: true,
+    msg: "berhasil",
+    data: pembelian,
+  });
+};

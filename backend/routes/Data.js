@@ -30,6 +30,7 @@ const {
   updateDataPersediaan,
   deleteDataPersediaan,
   getAllDataPersediaan,
+  getSaldo,
 } = require("../controllers/persediaan.controllers");
 const {
   runValidaton,
@@ -47,6 +48,7 @@ router.post(
 );
 router.get("/persediaan", middleware, getAllDataPersediaan);
 router.get("/persediaan/:funcL", middleware, getAllDataPersediaanSpec);
+router.get("/persediaann/:funcL", middleware, getSaldo);
 router.put("/persediaan/:upt", middleware, updateDataPersediaan);
 router.delete("/persediaan/:upt", middleware, deleteDataPersediaan);
 // router.get("/persediaan/:penjualan", middleware, getAllDataPersediaanSpec);

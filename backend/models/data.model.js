@@ -16,6 +16,9 @@ const dataSchema = mongoose.Schema({
   tahun: {
     type: String,
   },
+  bulan: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Data", dataSchema);

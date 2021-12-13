@@ -7,14 +7,32 @@ const { data_laba_rugi, dataGraf } = require("../functions/data_laba_rugi");
 exports.TambahData = async (req, res) => {
   const { funcL, item, jumlahHarga, tanggal } = req.body;
   // console.log("tahun", new Date().getFullYear());
+
+  const months = [
+    "JANUARI",
+    "FEBRUARI",
+    "MARET",
+    "APRIL",
+    "MEI",
+    "JUNI",
+    "JULI",
+    "AGUSTUS",
+    "SEPTEMBER",
+    "OKTOBER",
+    "NOVEMBER",
+    "DESEMBER",
+  ];
   const tahun = new Date(tanggal).getFullYear().toString();
   // console.log("tanggal", new Date(tanggal).getFullYear().toString());
+  const bulan = new Date(tanggal).getMonth();
+  // console.log(months[bulan]);
   const data = new Data({
     funcL,
     item,
     jumlahHarga,
     tanggal,
     tahun,
+    bulan: months[bulan],
   });
   data.save();
   return res.status(201).json({
@@ -105,8 +123,24 @@ exports.getData = async (req, res) => {
 };
 
 exports.getSPecData = async (req, res) => {
+  const months = [
+    "JANUARI",
+    "FEBRUARI",
+    "MARET",
+    "APRIL",
+    "MEI",
+    "JUNI",
+    "JULI",
+    "AGUSTUS",
+    "SEPTEMBER",
+    "OKTOBER",
+    "NOVEMBER",
+    "DESEMBER",
+  ];
   const tahun = new Date().getFullYear().toString();
-  const data = await Data.find({ tahun });
+  const bulan = new Date().getMonth();
+  const data = await Data.find({ tahun, bulan: months[bulan] });
+  // const data = await Data.find({ tahun });
   const LData = data_laba_rugi(data);
   const laba = new Laba({
     userId: req.id,

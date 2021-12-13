@@ -5,7 +5,8 @@ const Persediaan = require("../models/persediaan.model");
 const DataPersediaan = require("../models/data.persediaan.model");
 
 const { unique } = require("../functions/uniqueArray");
-const { kuantitas } = require("../functions/reduce");
+const { kuantitas, sumTotal } = require("../functions/reduce");
+const { arrayObject } = require("../functions/arrayObject");
 
 exports.TambahDataPersediaan = async (req, res) => {
   const {
@@ -167,10 +168,10 @@ exports.getAllDataPersediaan = async (req, res) => {
   const totalPembelian = kuantitas(pembelian);
   const totalPenjualan = kuantitas(penjualan);
   const totalPiutang = kuantitas(piutang);
-
+  // console.log(penjualan);
   const swif = unique(data);
   //! buat saldo disini
-
+  const laba_rugi_persediaan = arrayObject(data);
   return res.status(200).json({
     status: true,
     msg: "berhasil",
@@ -190,6 +191,10 @@ exports.getAllDataPersediaan = async (req, res) => {
           data: piutang,
           total: totalPiutang,
         },
+        // laba_rugi_persediaan: {
+        //   data:
+        // },
+        // data: data,
 
         swif: swif,
       },
@@ -222,7 +227,9 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
   const totalPembelian = kuantitas(pembelian);
   const totalPenjualan = kuantitas(penjualan);
   const totalPiutang = kuantitas(piutang);
-
+  const totalP = sumTotal(penjualan);
+  const totalPiu = sumTotal(piutang);
+  const sum = totalP + totalPiu;
   return res.status(200).json({
     status: true,
     msg: "berhasil",
@@ -241,6 +248,9 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
         piutang: {
           data: piutang,
           total: totalPiutang,
+        },
+        laba_rugi_persediaan: {
+          [req.params.funcL]: sum,
         },
       },
     },

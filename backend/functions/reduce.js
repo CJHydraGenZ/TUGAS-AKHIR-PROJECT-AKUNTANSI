@@ -5,3 +5,8 @@ exports.kuantitas = (arr) => {
 
   return total;
 };
+exports.sumTotal = (arr) => {
+  const total = arr.map((x) => x.jumlah).reduce((acc, curr) => curr + acc, 0);
+
+  return total;
+};

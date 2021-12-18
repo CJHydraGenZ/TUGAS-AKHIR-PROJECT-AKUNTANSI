@@ -10,3 +10,39 @@ exports.sumTotal = (arr) => {
 
   return total;
 };
+
+exports.convertArrayReduseObject = (data) => {
+  let newObj = {
+    data: [],
+
+    total: 0,
+    // total: 0,
+  };
+
+  data.map((eachObj, i) => {
+    let p = 0;
+
+    newObj.data.push({
+      persediaanName: eachObj.persediaanName,
+
+      jumlah: (eachObj.jumlah += eachObj.jumlah),
+    });
+    // }
+  });
+
+  const obj = {
+    data: [
+      ...newObj.data
+        .reduce((map, obj) => map.set(obj.persediaanName, obj), new Map())
+        .values(),
+    ],
+    total: [
+      ...newObj.data
+        .reduce((map, obj) => map.set(obj.persediaanName, obj), new Map())
+        .values(),
+    ]
+      .map((x) => +x.jumlah)
+      .reduce((a, c) => c + a, 0),
+  };
+  return obj;
+};

@@ -5,7 +5,11 @@ const Persediaan = require("../models/persediaan.model");
 const DataPersediaan = require("../models/data.persediaan.model");
 
 const { unique } = require("../functions/uniqueArray");
-const { kuantitas, sumTotal } = require("../functions/reduce");
+const {
+  kuantitas,
+  sumTotal,
+  convertArrayReduseObject,
+} = require("../functions/reduce");
 const { arrayObject } = require("../functions/arrayObject");
 
 exports.TambahDataPersediaan = async (req, res) => {
@@ -164,10 +168,10 @@ exports.getAllDataPersediaan = async (req, res) => {
     tahun,
     funcL: `piutang`,
   });
-
   const totalPembelian = kuantitas(pembelian);
   const totalPenjualan = kuantitas(penjualan);
   const totalPiutang = kuantitas(piutang);
+  const lbp = convertArrayReduseObject(penjualan);
   // console.log(penjualan);
   const swif = unique(data);
   //! buat saldo disini
@@ -191,9 +195,9 @@ exports.getAllDataPersediaan = async (req, res) => {
           data: piutang,
           total: totalPiutang,
         },
-        // laba_rugi_persediaan: {
-        //   data:
-        // },
+        laba_rugi_persediaan: {
+          penjualan: lbp,
+        },
         // data: data,
 
         swif: swif,

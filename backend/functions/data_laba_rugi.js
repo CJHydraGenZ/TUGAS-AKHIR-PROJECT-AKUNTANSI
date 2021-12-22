@@ -283,6 +283,21 @@ exports.data_laba_rugi = (data) => {
   return LData;
 };
 
+// exports.dataDashboard = (data) => {
+//   const { tpu, totalTPU } = wraping("tpu", "totalTPU", data);
+//   const { tbp, totalTBP } = wraping("tbp", "totalTBP", data);
+//   const { bpeg, totalBPEG } = wraping("bpeg", "totalBPEG", data);
+//   const { bk, totalBK } = wraping("bk", "totalBK", data);
+//   const { bpen, totalBPEN } = wraping("bpen", "totalBPEN", data);
+//   const { pl, totalPL } = wraping("pl", "totalPL", data);
+//   const { bl, totalBL } = wraping("bl", "totalBL", data);
+
+//   ///! pendapatan dan pengeluaran (beban) dari laba rugi
+
+//   // const LData
+//   return null;
+// };
+
 exports.dataGraf = (data) => {
   //? laba rugi
   const { tpu, totalTPU } = wraping("tpu", "totalTPU", data);

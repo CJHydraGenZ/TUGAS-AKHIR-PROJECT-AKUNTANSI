@@ -171,7 +171,9 @@ exports.getAllDataPersediaan = async (req, res) => {
   const totalPembelian = kuantitas(pembelian);
   const totalPenjualan = kuantitas(penjualan);
   const totalPiutang = kuantitas(piutang);
-  const lbp = convertArrayReduseObject(penjualan);
+  const lbp_penjualan = convertArrayReduseObject(penjualan);
+  const lbpp_piutang = convertArrayReduseObject(piutang);
+  const lbpp_pembelian = convertArrayReduseObject(pembelian);
   // console.log(penjualan);
   const swif = unique(data);
   //! buat saldo disini
@@ -196,7 +198,9 @@ exports.getAllDataPersediaan = async (req, res) => {
           total: totalPiutang,
         },
         laba_rugi_persediaan: {
-          penjualan: lbp,
+          penjualan: lbp_penjualan,
+          piutang: lbpp_piutang,
+          pembelian: lbpp_pembelian,
         },
         // data: data,
 

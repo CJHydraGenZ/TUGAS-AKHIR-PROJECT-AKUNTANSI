@@ -92,9 +92,26 @@ exports.deleteData = async (req, res) => {
   });
 };
 exports.getAllData = async (req, res) => {
-  // console.log(req.params.lb);
+  const months = [
+    "JANUARI",
+    "FEBRUARI",
+    "MARET",
+    "APRIL",
+    "MEI",
+    "JUNI",
+    "JULI",
+    "AGUSTUS",
+    "SEPTEMBER",
+    "OKTOBER",
+    "NOVEMBER",
+    "DESEMBER",
+  ];
+  const tahun = new Date().getFullYear().toString();
+  const bulan = new Date().getMonth();
   const data = await Data.find();
+  const dataDasboard = await Data.find({ tahun, bulan: months[bulan] });
   const LData = data_laba_rugi(data);
+  // const dasboard = data_laba_rugi(dataDasboard);
   return res.status(200).json({
     status: true,
     msg: "berhasil",

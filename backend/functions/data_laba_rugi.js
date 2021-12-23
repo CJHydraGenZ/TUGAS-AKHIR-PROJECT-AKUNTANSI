@@ -16,6 +16,24 @@ const wraping = (e, t, data) => {
     [t]: total,
   };
 };
+const wraping_at = (e, t, data) => {
+  const res = data;
+  const ename = res
+    .map((x, i) => {
+      if (x.funcL === e) {
+        return x;
+      }
+    })
+    .filter((f) => f);
+  let total = ename
+    .map(({ item, jumlahHarga }) => +jumlahHarga)
+    .reduce((acc, curr) => curr - acc, 0);
+
+  return {
+    [e]: ename,
+    [t]: Math.abs(total),
+  };
+};
 
 exports.data_laba_rugi = (data) => {
   //? laba rugi
@@ -30,7 +48,7 @@ exports.data_laba_rugi = (data) => {
   //? neraca
   const { al, totalAL } = wraping("al", "totalAL", data); //!  untuk aset tetap rumusnya beda
   const { atl, totalATL } = wraping("atl", "totalATL", data);
-  const { at, totalAT } = wraping("at", "totalAT", data);
+  const { at, totalAT } = wraping_at("at", "totalAT", data);
   const { kl, totalKL } = wraping("kl", "totalKL", data);
   const { kjp, totalKJP } = wraping("kjp", "totalKJP", data);
   const { ekuitas, totalEKUITAS } = wraping("ekuitas", "totalEKUITAS", data);
@@ -52,7 +70,8 @@ exports.data_laba_rugi = (data) => {
   let LR1 = totalTPU - totalTBP;
   let LR2 = totalBPEG + totalBK + totalBPEN;
   let LR3 = totalBL - totalPL;
-  let LABA_RUGI = LR1 - LR2 + LR3;
+  let sumLR = LR1 - LR2;
+  let LABA_RUGI = sumLR - LR3;
   const grafLaba = [
     {
       name: "Page A",

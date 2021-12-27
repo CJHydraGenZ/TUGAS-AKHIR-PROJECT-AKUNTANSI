@@ -35,6 +35,43 @@ const wraping_at = (e, t, data) => {
   };
 };
 
+const wrapDashboard = (data1, data2) => {
+  // let formatted_date =
+  //   current_datetime.getDate() +
+  //   "-" +
+  //   (current_datetime.getMonth() + 1) +
+  //   "-" +
+  //   current_datetime.getFullYear();
+  // `${new Date(x.tanggal).getFullYear()}-${
+  //   new Date(x.tanggal).getMonth() + 1
+  // }-${new Date(x.tanggal).getDate()}`
+  const d1 = data1.map((x) => {
+    return {
+      x: new Date(x.tanggal),
+      y: x.jumlahHarga,
+    };
+  });
+  const tp1 = data1
+    .map((x) => x.jumlahHarga)
+    .reduce((acc, cur) => cur + acc, 0);
+  const d2 = data2.map((x) => {
+    return {
+      x: new Date(x.tanggal),
+      y: x.jumlahHarga,
+    };
+  });
+  const tp2 = data2
+    .map((x) => x.jumlahHarga)
+    .reduce((acc, cur) => cur + acc, 0);
+
+  return {
+    pendapatan: d2,
+    totalPendapatan: tp2,
+    pengeluaran: d1,
+    totalPengeluaran: tp1,
+  };
+};
+
 exports.data_laba_rugi = (data) => {
   //? laba rugi
   const { tpu, totalTPU } = wraping("tpu", "totalTPU", data);
@@ -136,6 +173,11 @@ exports.data_laba_rugi = (data) => {
       LR2: LR2,
       LR3: LR3,
       LABA_RUGI: LABA_RUGI,
+
+      grafDashboard: wrapDashboard(
+        [...tpu, ...pl],
+        [...tbp, ...bpeg, ...bk, ...bpen, ...bl]
+      ),
       grafLaba: [
         {
           name: "Pendapatan Usaha",
@@ -347,6 +389,10 @@ exports.dataGraf = (data) => {
   const { up, totalUP } = wraping("up", "totalUP", data);
 
   const LData = {
+    grafDashboard: wrapDashboard(
+      [...tpu, ...pl],
+      [...tbp, ...bpeg, ...bk, ...bpen, ...bl]
+    ),
     grafLaba: [
       {
         name: "Pendapatan Usaha",

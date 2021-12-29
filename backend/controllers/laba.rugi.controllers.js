@@ -119,8 +119,25 @@ exports.getAllData = async (req, res) => {
   });
 };
 exports.getGraf = async (req, res) => {
+  const months = [
+    "JANUARI",
+    "FEBRUARI",
+    "MARET",
+    "APRIL",
+    "MEI",
+    "JUNI",
+    "JULI",
+    "AGUSTUS",
+    "SEPTEMBER",
+    "OKTOBER",
+    "NOVEMBER",
+    "DESEMBER",
+  ];
+  const tahun = new Date().getFullYear().toString();
+  const bulan = new Date().getMonth();
+  const data = await Data.find({ tahun, bulan: months[bulan] });
   // console.log(req.params.lb);
-  const data = await Data.find();
+  // const data = await Data.find();
   const LData = dataGraf(data);
   return res.status(200).json({
     status: true,

@@ -109,36 +109,7 @@ exports.data_laba_rugi = (data) => {
   let LR3 = totalBL - totalPL;
   let sumLR = LR1 - LR2;
   let LABA_RUGI = sumLR - LR3;
-  const grafLaba = [
-    {
-      name: "Page A",
-      total: 4000,
-    },
-    {
-      name: "Page B",
-      total: 3000,
-    },
-    {
-      name: "Page C",
-      total: 2000,
-    },
-    {
-      name: "Page D",
-      total: 2780,
-    },
-    {
-      name: "Page E",
-      total: 1890,
-    },
-    {
-      name: "Page F",
-      total: 2390,
-    },
-    {
-      name: "Page G",
-      total: 3490,
-    },
-  ];
+
   const LData = {
     laba_rugi: {
       tpu: {
@@ -178,36 +149,6 @@ exports.data_laba_rugi = (data) => {
         [...tpu, ...pl],
         [...tbp, ...bpeg, ...bk, ...bpen, ...bl]
       ),
-      grafLaba: [
-        {
-          name: "Pendapatan Usaha",
-          total: totalTPU,
-        },
-        {
-          name: "Beban Diluar Usaha",
-          total: totalTBP,
-        },
-        {
-          name: "Beban Pengawai",
-          total: totalBPEG,
-        },
-        {
-          name: "Beban Kantor",
-          total: totalBK,
-        },
-        {
-          name: "Beban Penyusutan",
-          total: totalBPEN,
-        },
-        {
-          name: "Pendapatan lain-lain",
-          total: totalPL,
-        },
-        {
-          name: "Beban lain-lain",
-          total: totalBL,
-        },
-      ],
     },
     neraca: {
       al: {
@@ -237,32 +178,6 @@ exports.data_laba_rugi = (data) => {
 
       TOTAL_JUMLAH_ASET,
       TOTAL_KNE,
-      grafNeraca: [
-        {
-          name: "Aset Lancar",
-          total: totalAL,
-        },
-        {
-          name: "Aset Tidak Lancar",
-          total: totalATL,
-        },
-        {
-          name: "Aset Tetap",
-          total: totalAT,
-        },
-        {
-          name: "Kewajiban Lancar",
-          total: totalKL,
-        },
-        {
-          name: "Kewajiban Jangka Panjang",
-          total: totalKJP,
-        },
-        {
-          name: "Ekuitas",
-          total: totalEKUITAS,
-        },
-      ],
     },
     lap_keuangan: {
       kdsk: {
@@ -301,44 +216,6 @@ exports.data_laba_rugi = (data) => {
         data: up,
         total: totalUP,
       },
-      grafLap_keuangan: [
-        {
-          name: "Kas dan Setara Kas",
-          total: totalKDSK,
-        },
-        {
-          name: "Piutang Dagang",
-          total: totalPD,
-        },
-        {
-          name: "Piutang Lain-lain",
-          total: totalPIL,
-        },
-        {
-          name: "Persediaan",
-          total: totalPER,
-        },
-        {
-          name: "Uang Muka",
-          total: totalUM,
-        },
-        {
-          name: "Utang Usaha",
-          total: totalUU,
-        },
-        {
-          name: "Dana Titipan",
-          total: totalDT,
-        },
-        {
-          name: "Utang Leasing",
-          total: totalUL,
-        },
-        {
-          name: "Utang Pajak",
-          total: totalUP,
-        },
-      ],
     },
   };
   return LData;
@@ -393,100 +270,6 @@ exports.dataGraf = (data) => {
       [...tpu, ...pl],
       [...tbp, ...bpeg, ...bk, ...bpen, ...bl]
     ),
-    grafLaba: [
-      {
-        name: "Pendapatan Usaha",
-        total: totalTPU,
-      },
-      {
-        name: "Beban Diluar Usaha",
-        total: totalTBP,
-      },
-      {
-        name: "Beban Pengawai",
-        total: totalBPEG,
-      },
-      {
-        name: "Beban Kantor",
-        total: totalBK,
-      },
-      {
-        name: "Beban Penyusutan",
-        total: totalBPEN,
-      },
-      {
-        name: "Pendapatan lain-lain",
-        total: totalPL,
-      },
-      {
-        name: "Beban lain-lain",
-        total: totalBL,
-      },
-    ],
-    grafNeraca: [
-      {
-        name: "Aset Lancar",
-        total: totalAL,
-      },
-      {
-        name: "Aset Tidak Lancar",
-        total: totalATL,
-      },
-      {
-        name: "Aset Tetap",
-        total: totalAT,
-      },
-      {
-        name: "Kewajiban Lancar",
-        total: totalKL,
-      },
-      {
-        name: "Kewajiban Jangka Panjang",
-        total: totalKJP,
-      },
-      {
-        name: "Ekuitas",
-        total: totalEKUITAS,
-      },
-    ],
-    grafLap_keuangan: [
-      {
-        name: "Kas dan Setara Kas",
-        total: totalKDSK,
-      },
-      {
-        name: "Piutang Dagang",
-        total: totalPD,
-      },
-      {
-        name: "Piutang Lain-lain",
-        total: totalPIL,
-      },
-      {
-        name: "Persediaan",
-        total: totalPER,
-      },
-      {
-        name: "Uang Muka",
-        total: totalUM,
-      },
-      {
-        name: "Utang Usaha",
-        total: totalUU,
-      },
-      {
-        name: "Dana Titipan",
-        total: totalDT,
-      },
-      {
-        name: "Utang Leasing",
-        total: totalUL,
-      },
-      {
-        name: "Utang Pajak",
-        total: totalUP,
-      },
-    ],
   };
   return LData;
 };

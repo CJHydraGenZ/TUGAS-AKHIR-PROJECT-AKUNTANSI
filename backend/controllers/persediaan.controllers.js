@@ -76,7 +76,9 @@ exports.TambahDataPersediaan = async (req, res) => {
 exports.updateDataPersediaan = async (req, res) => {
   console.log(req.params.upt);
   // const { funcL, item, jumlahHarga, tanggal } = req.body;
+
   const { persediaanName, funcL, namaP, kuantitas, harga, tanggal } = req.body;
+  const tahun = new Date(tanggal).getFullYear().toString();
   // console.log(kuantitas, harga, tanggal);
   const data = await Persediaan.findByIdAndUpdate(
     { _id: `${req.params.upt}` },
@@ -86,6 +88,7 @@ exports.updateDataPersediaan = async (req, res) => {
         kuantitas: kuantitas,
         harga: harga,
         tanggal: tanggal,
+        tahun,
       },
     },
     { useFindAndModify: false },
@@ -155,6 +158,7 @@ exports.getAllDataPersediaan = async (req, res) => {
   const tahun = new Date().getFullYear().toString();
 
   const data = await Persediaan.find({ tahun });
+  const dataA = await Persediaan.find();
   const penjualan = await Persediaan.find({
     tahun,
     funcL: `penjualan`,
@@ -175,7 +179,7 @@ exports.getAllDataPersediaan = async (req, res) => {
   const lbpp_piutang = convertArrayReduseObject(piutang);
   const lbpp_pembelian = convertArrayReduseObject(pembelian);
   // console.log(penjualan);
-  const swif = unique(data);
+  const swif = unique(dataA);
   //! buat saldo disini
   const laba_rugi_persediaan = arrayObject(data);
   return res.status(200).json({

@@ -140,16 +140,23 @@ exports.data_laba_rugi = (data) => {
         data: bl,
         total: totalBL,
       },
+      ttpu: totalTPU,
+      ttbp: totalTBP,
+      tbpeg: totalBPEG,
+      tbk: totalBK,
+      tbpen: totalBPEN,
+      tbl: totalBL,
+      tpl: totalPL,
       LR1: LR1,
       LR2: LR2,
       LR3: LR3,
       LABA_RUGI: LABA_RUGI,
-
       grafDashboard: wrapDashboard(
         [...tpu, ...pl],
         [...tbp, ...bpeg, ...bk, ...bpen, ...bl]
       ),
     },
+
     neraca: {
       al: {
         data: al,

@@ -43,8 +43,25 @@ exports.TambahData = async (req, res) => {
 };
 
 exports.updateData = async (req, res) => {
-  console.log(req.params.up);
+  // console.log(req.params.up);
+  const months = [
+    "JANUARI",
+    "FEBRUARI",
+    "MARET",
+    "APRIL",
+    "MEI",
+    "JUNI",
+    "JULI",
+    "AGUSTUS",
+    "SEPTEMBER",
+    "OKTOBER",
+    "NOVEMBER",
+    "DESEMBER",
+  ];
   const { funcL, item, jumlahHarga, tanggal } = req.body;
+  const tahun = new Date(tanggal).getFullYear().toString();
+  // console.log("tanggal", new Date(tanggal).getFullYear().toString());
+  const bulan = new Date(tanggal).getMonth();
   const data = await Data.findByIdAndUpdate(
     { _id: `${req.params.up}` },
     {
@@ -52,6 +69,8 @@ exports.updateData = async (req, res) => {
         item: item,
         jumlahHarga: jumlahHarga,
         tanggal: tanggal,
+        tahun,
+        bulan: months[bulan],
       },
     },
     { useFindAndModify: false },

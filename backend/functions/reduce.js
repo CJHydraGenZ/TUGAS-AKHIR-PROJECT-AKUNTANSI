@@ -24,8 +24,8 @@ exports.convertArrayReduseObject = (data) => {
 
     newObj.data.push({
       persediaanName: eachObj.persediaanName,
-
-      jumlah: (eachObj.jumlah += eachObj.jumlah),
+      kuantitas: eachObj.kuantitas,
+      jumlah: eachObj.jumlah,
     });
     // }
   });

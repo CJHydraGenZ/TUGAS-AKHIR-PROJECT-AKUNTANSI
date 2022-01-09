@@ -131,28 +131,6 @@ exports.deleteDataPersediaan = async (req, res) => {
   });
 };
 
-// exports.updateData = async (req, res) => {
-//   console.log(req.params.up);
-//   const { funcL, item, jumlahHarga, tanggal } = req.body;
-//   const data = await Data.findByIdAndUpdate(
-//     { _id: `${req.params.up}` },
-//     {
-//       $set: {
-//         item: item,
-//         jumlahHarga: jumlahHarga,
-//         tanggal: tanggal,
-//       },
-//     },
-//     { useFindAndModify: false },
-//     (err, docs) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log("Updated User : ", docs);
-//       }
-//     }
-//   );
-// }
 exports.getAllDataPersediaan = async (req, res) => {
   // console.log(req.params.lb);
   const tahun = new Date().getFullYear().toString();
@@ -178,6 +156,8 @@ exports.getAllDataPersediaan = async (req, res) => {
   const lbp_penjualan = convertArrayReduseObject(penjualan);
   const lbpp_piutang = convertArrayReduseObject(piutang);
   const lbpp_pembelian = convertArrayReduseObject(pembelian);
+  const sumPembelian = sumTotal(pembelian);
+  const sumPenjualan = sumTotal(penjualan);
   // console.log(penjualan);
   const swif = unique(dataA);
   //! buat saldo disini
@@ -202,9 +182,15 @@ exports.getAllDataPersediaan = async (req, res) => {
           total: totalPiutang,
         },
         laba_rugi_persediaan: {
-          penjualan: lbp_penjualan,
-          piutang: lbpp_piutang,
-          pembelian: lbpp_pembelian,
+          penjualan: {
+            data: penjualan,
+            total: sumPenjualan,
+          },
+
+          pembelian: {
+            data: pembelian,
+            total: sumPembelian,
+          },
         },
         // data: data,
 
@@ -293,4 +279,179 @@ exports.getSaldo = async (req, res) => {
     msg: "berhasil",
     data: pembelian,
   });
+};
+
+exports.getPSPecData = async (req, res) => {
+  const months = [
+    "JANUARI",
+    "FEBRUARI",
+    "MARET",
+    "APRIL",
+    "MEI",
+    "JUNI",
+    "JULI",
+    "AGUSTUS",
+    "SEPTEMBER",
+    "OKTOBER",
+    "NOVEMBER",
+    "DESEMBER",
+  ];
+  const tahun = new Date().getFullYear().toString();
+
+  const penjualan = await Persediaan.find({
+    // persediaanName: `${req.params.funcL}`,
+    tahun,
+    funcL: `penjualan`,
+  });
+  const pembelian = await Persediaan.find({
+    // persediaanName: `${req.params.funcL}`,
+    tahun,
+    funcL: `pembelian`,
+  });
+  const piutang = await Persediaan.find({
+    // persediaanName: `${req.params.funcL}`,
+    tahun,
+    funcL: `piutang`,
+  });
+
+  const saldo = await Persediaan.findOne({
+    // persediaanName: `${req.params.funcL}`,
+    tahun,
+    funcL: `pembelian`,
+  });
+
+  const totalPembelian = kuantitas(pembelian);
+  const totalPenjualan = kuantitas(penjualan);
+  const totalPiutang = kuantitas(piutang);
+  const totalP = sumTotal(penjualan);
+  const totalPiu = sumTotal(piutang);
+  const sum = totalP + totalPiu;
+  // const bulan = new Date().getMonth();
+  // const data = await Persediaan.find({ tahun, bulan: months[bulan] });
+  // const data = await Persediaan.find({ tahun });
+  // const LData = data_laba_rugi(data);
+  // const laba = new Laba({
+  //   userId: req.id,
+  //   data: LData,
+  //   waktu_get: Date.now(),
+  // });
+  // laba.save();
+  const sumPembelian = sumTotal(pembelian);
+  const sumPenjualan = sumTotal(penjualan);
+  return res.status(200).json({
+    status: true,
+    msg: "Get All Persediaan Success",
+    data: {
+      persediaan: {
+        pembelian: {
+          data: pembelian,
+          total: totalPembelian,
+        },
+        penjualan: {
+          data: penjualan,
+          total: totalPenjualan,
+          // kuantitas: totalPembelian - totalPenjualan,
+          // saldo: saldo,
+        },
+        piutang: {
+          data: piutang,
+          total: totalPiutang,
+        },
+        laba_rugi_persediaan: {
+          penjualan: {
+            data: penjualan,
+            total: sumPenjualan,
+          },
+
+          pembelian: {
+            data: pembelian,
+            total: sumPembelian,
+          },
+        },
+        // data: data,
+
+        // swif: swif,
+      },
+    },
+  });
+};
+
+exports.PostPSPecData = async (req, res) => {
+  const { awal, akhir } = req.body;
+
+  console.log("ini awal", awal, "inni akhir", akhir);
+  console.log("ini awal", req.body);
+
+  //! buat saldo disini
+  // const laba_rugi_persediaan = arrayObject(data);
+
+  if (awal && akhir) {
+    // const data = await Persediaan.find({
+    //   tanggal: {
+    //     $gte: `${awal}`, //! bisa menggunakan pilihan
+    //     $lt: `${akhir}`, //! pilihan aja
+    //   },
+    // });
+    // const tahun = new Date().getFullYear().toString();
+
+    // const data = await Persediaan.find({ tahun });
+    // const dataA = await Persediaan.find();
+    const penjualan = await Persediaan.find({
+      // tahun,
+      funcL: `penjualan`,
+      tanggal: {
+        $gte: `${awal}`, //! bisa menggunakan pilihan
+        $lt: `${akhir}`, //! pilihan aja
+      },
+    });
+    const pembelian = await Persediaan.find({
+      // tahun,
+      funcL: `pembelian`,
+      tanggal: {
+        $gte: `${awal}`, //! bisa menggunakan pilihan
+        $lt: `${akhir}`, //! pilihan aja
+      },
+    });
+
+    const piutang = await Persediaan.find({
+      // tahun,
+      funcL: `piutang`,
+      tanggal: {
+        $gte: `${awal}`, //! bisa menggunakan pilihan
+        $lt: `${akhir}`, //! pilihan aja
+      },
+    });
+    const totalPembelian = kuantitas(pembelian);
+    const totalPenjualan = kuantitas(penjualan);
+    const totalPiutang = kuantitas(piutang);
+    // const lbp_penjualan = convertArrayReduseObject(penjualan);
+    // const lbpp_piutang = convertArrayReduseObject(piutang);
+    // const lbpp_pembelian = convertArrayReduseObject(pembelian);
+    const sumPembelian = sumTotal(pembelian);
+    const sumPenjualan = sumTotal(penjualan);
+    // console.log(penjualan);
+    // const swif = unique(dataA);
+
+    return res.status(200).json({
+      status: true,
+      msg: "Get Specific Data Success",
+      data: {
+        persediaan: {
+          laba_rugi_persediaan: {
+            penjualan: {
+              data: penjualan,
+              total: sumPenjualan,
+            },
+            pembelian: {
+              data: pembelian,
+              total: sumPembelian,
+            },
+          },
+          // data: data,
+
+          // swif: swif,
+        },
+      },
+    });
+  }
 };

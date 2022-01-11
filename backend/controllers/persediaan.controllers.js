@@ -4,7 +4,7 @@ require("dotenv").config();
 const Persediaan = require("../models/persediaan.model");
 const DataPersediaan = require("../models/data.persediaan.model");
 
-const { unique } = require("../functions/uniqueArray");
+const { unique, uniqueK } = require("../functions/uniqueArray");
 const {
   kuantitas,
   sumTotal,
@@ -297,31 +297,35 @@ exports.getPSPecData = async (req, res) => {
     "DESEMBER",
   ];
   const tahun = new Date().getFullYear().toString();
-
+  const dataA = await Persediaan.find();
+  const swif = uniqueK(dataA);
   const penjualan = await Persediaan.find({
-    // persediaanName: `${req.params.funcL}`,
+    kategori: `${req.params.p}`,
     tahun,
     funcL: `penjualan`,
   });
   const pembelian = await Persediaan.find({
     // persediaanName: `${req.params.funcL}`,
+    kategori: `${req.params.p}`,
     tahun,
     funcL: `pembelian`,
   });
   const piutang = await Persediaan.find({
     // persediaanName: `${req.params.funcL}`,
+    kategori: `${req.params.p}`,
     tahun,
     funcL: `piutang`,
   });
 
-  const saldo = await Persediaan.findOne({
+  const saldoAwal = await Persediaan.findOne({
     // persediaanName: `${req.params.funcL}`,
+    kategori: `${req.params.p}`,
     tahun,
     funcL: `pembelian`,
   });
 
-  const totalPembelian = kuantitas(pembelian);
-  const totalPenjualan = kuantitas(penjualan);
+  const kPembelian = kuantitas(pembelian);
+  const kPenjualan = kuantitas(penjualan);
   const totalPiutang = kuantitas(piutang);
   const totalP = sumTotal(penjualan);
   const totalPiu = sumTotal(piutang);
@@ -338,6 +342,10 @@ exports.getPSPecData = async (req, res) => {
   // laba.save();
   const sumPembelian = sumTotal(pembelian);
   const sumPenjualan = sumTotal(penjualan);
+  // const AwalSldo = sumTotal(saldoAwal);
+  // const KuaAwalSldo = kuantitas(saldoAwal);
+  // let SaldoP = AwalSldo + sumPembelian;
+  // let KuantitasP = KuaAwalSldo + kPembelian;
   return res.status(200).json({
     status: true,
     msg: "Get All Persediaan Success",
@@ -345,11 +353,11 @@ exports.getPSPecData = async (req, res) => {
       persediaan: {
         pembelian: {
           data: pembelian,
-          total: totalPembelian,
+          total: kPembelian,
         },
         penjualan: {
           data: penjualan,
-          total: totalPenjualan,
+          total: kPenjualan,
           // kuantitas: totalPembelian - totalPenjualan,
           // saldo: saldo,
         },
@@ -358,15 +366,22 @@ exports.getPSPecData = async (req, res) => {
           total: totalPiutang,
         },
         laba_rugi_persediaan: {
+          saldoAwal: saldoAwal,
           penjualan: {
             data: penjualan,
+            kuantitas: kPenjualan,
             total: sumPenjualan,
           },
-
           pembelian: {
             data: pembelian,
+            kuantitas: kPembelian,
             total: sumPembelian,
           },
+          // persediaan: {
+          //   saldo: SaldoP,
+          //   kuantitas: KuantitasP,
+          // },
+          swif: swif,
         },
         // data: data,
 
@@ -455,3 +470,6 @@ exports.PostPSPecData = async (req, res) => {
     });
   }
 };
+
+// saldo awal  + pembelian bertambah ke saldo = total niali persediaan
+// penjualan  = persediaan -  penjualan

@@ -9,6 +9,7 @@ const {
   kuantitas,
   sumTotal,
   convertArrayReduseObject,
+  awal,
 } = require("../functions/reduce");
 const { arrayObject } = require("../functions/arrayObject");
 
@@ -225,9 +226,12 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
   const totalPembelian = kuantitas(pembelian);
   const totalPenjualan = kuantitas(penjualan);
   const totalPiutang = kuantitas(piutang);
-  const totalP = sumTotal(penjualan);
-  const totalPiu = sumTotal(piutang);
-  const sum = totalP + totalPiu;
+
+  const sumPembelian = sumTotal(pembelian);
+  const sumPenjualan = sumTotal(penjualan);
+  const sumPiutang = sumTotal(piutang);
+
+  let sum = sumPenjualan - sumPiutang;
   return res.status(200).json({
     status: true,
     msg: "berhasil",
@@ -236,16 +240,19 @@ exports.getAllDataPersediaanSpec = async (req, res) => {
         pembelian: {
           data: pembelian,
           total: totalPembelian,
+          totalJumlah: sumPembelian,
         },
         penjualan: {
           data: penjualan,
           total: totalPenjualan,
+          totalJumlah: sumPenjualan,
           kuantitas: totalPembelian - totalPenjualan,
           saldo: saldo,
         },
         piutang: {
           data: piutang,
           total: totalPiutang,
+          totalJumlah: sumPiutang,
         },
         laba_rugi_persediaan: {
           [req.params.funcL]: sum,
@@ -346,6 +353,8 @@ exports.getPSPecData = async (req, res) => {
   // const KuaAwalSldo = kuantitas(saldoAwal);
   // let SaldoP = AwalSldo + sumPembelian;
   // let KuantitasP = KuaAwalSldo + kPembelian;
+  const kAwal = awal(saldoAwal, "Saldo Awal");
+
   return res.status(200).json({
     status: true,
     msg: "Get All Persediaan Success",
@@ -366,7 +375,19 @@ exports.getPSPecData = async (req, res) => {
           total: totalPiutang,
         },
         laba_rugi_persediaan: {
-          saldoAwal: saldoAwal,
+          saldo: {
+            saldoAwal: kAwal,
+            saldoPersediaan: {
+              SaldoName: "Saldo Persediaan",
+              kuantitas: kAwal.kuantitas + kPembelian,
+              jumlah: (kAwal.kuantitas + kPembelian) * kAwal.harga,
+            },
+            saldoAkhir: {
+              SaldoName: "Saldo Akhir",
+              kuantitas: kAwal.kuantitas + kPembelian - kPenjualan,
+              jumlah: (kAwal.kuantitas + kPembelian - kPenjualan) * kAwal.harga,
+            },
+          },
           penjualan: {
             data: penjualan,
             kuantitas: kPenjualan,

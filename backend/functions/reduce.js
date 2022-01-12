@@ -11,6 +11,14 @@ exports.sumTotal = (arr) => {
   return total;
 };
 
+exports.awal = (arr, name) => {
+  return {
+    SaldoName: name,
+    kuantitas: arr.kuantitas,
+    harga: arr.harga,
+    jumlah: arr.jumlah,
+  };
+};
 exports.convertArrayReduseObject = (data) => {
   let newObj = {
     data: [],

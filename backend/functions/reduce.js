@@ -11,7 +11,7 @@ exports.sumTotal = (arr) => {
   return total;
 };
 
-exports.awal = (arr, name) => {
+exports.awalS = (arr, name) => {
   return {
     SaldoName: name,
     kuantitas: arr.kuantitas,

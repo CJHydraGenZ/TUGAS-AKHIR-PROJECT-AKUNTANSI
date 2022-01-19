@@ -9,7 +9,7 @@ const {
   kuantitas,
   sumTotal,
   convertArrayReduseObject,
-  awal,
+  awalS,
 } = require("../functions/reduce");
 const { arrayObject } = require("../functions/arrayObject");
 
@@ -353,7 +353,7 @@ exports.getPSPecData = async (req, res) => {
   // const KuaAwalSldo = kuantitas(saldoAwal);
   // let SaldoP = AwalSldo + sumPembelian;
   // let KuantitasP = KuaAwalSldo + kPembelian;
-  const kAwal = awal(saldoAwal, "Saldo Awal");
+  const kAwal = awalS(saldoAwal, "Saldo Awal");
 
   return res.status(200).json({
     status: true,
@@ -414,9 +414,7 @@ exports.getPSPecData = async (req, res) => {
 
 exports.PostPSPecData = async (req, res) => {
   const { awal, akhir } = req.body;
-
-  console.log("ini awal", awal, "inni akhir", akhir);
-  console.log("ini awal", req.body);
+  const tahun = new Date().getFullYear().toString();
 
   //! buat saldo disini
   // const laba_rugi_persediaan = arrayObject(data);
@@ -434,6 +432,8 @@ exports.PostPSPecData = async (req, res) => {
     // const dataA = await Persediaan.find();
     const penjualan = await Persediaan.find({
       // tahun,
+      kategori: `${req.params.p}`,
+
       funcL: `penjualan`,
       tanggal: {
         $gte: `${awal}`, //! bisa menggunakan pilihan
@@ -442,6 +442,8 @@ exports.PostPSPecData = async (req, res) => {
     });
     const pembelian = await Persediaan.find({
       // tahun,
+      kategori: `${req.params.p}`,
+
       funcL: `pembelian`,
       tanggal: {
         $gte: `${awal}`, //! bisa menggunakan pilihan
@@ -451,20 +453,54 @@ exports.PostPSPecData = async (req, res) => {
 
     const piutang = await Persediaan.find({
       // tahun,
+      kategori: `${req.params.p}`,
+
       funcL: `piutang`,
       tanggal: {
         $gte: `${awal}`, //! bisa menggunakan pilihan
         $lt: `${akhir}`, //! pilihan aja
       },
     });
+
+    const saldoAwal = await Persediaan.findOne({
+      // persediaanName: `${req.params.funcL}`,
+      kategori: `${req.params.p}`,
+      tahun,
+      funcL: `pembelian`,
+    });
+    console.log("ini awal", awal, "inni akhir", akhir);
+    console.log("ini awal", req.body);
     const totalPembelian = kuantitas(pembelian);
     const totalPenjualan = kuantitas(penjualan);
     const totalPiutang = kuantitas(piutang);
     // const lbp_penjualan = convertArrayReduseObject(penjualan);
     // const lbpp_piutang = convertArrayReduseObject(piutang);
     // const lbpp_pembelian = convertArrayReduseObject(pembelian);
+
+    const kPembelian = kuantitas(pembelian);
+    const kPenjualan = kuantitas(penjualan);
+    // const totalPiutang = kuantitas(piutang);
+    const totalP = sumTotal(penjualan);
+    const totalPiu = sumTotal(piutang);
+    const sum = totalP + totalPiu;
+    // const bulan = new Date().getMonth();
+    // const data = await Persediaan.find({ tahun, bulan: months[bulan] });
+    // const data = await Persediaan.find({ tahun });
+    // const LData = data_laba_rugi(data);
+    // const laba = new Laba({
+    //   userId: req.id,
+    //   data: LData,
+    //   waktu_get: Date.now(),
+    // });
+    // laba.save();
     const sumPembelian = sumTotal(pembelian);
     const sumPenjualan = sumTotal(penjualan);
+    // const AwalSldo = sumTotal(saldoAwal);
+    // const KuaAwalSldo = kuantitas(saldoAwal);
+    // let SaldoP = AwalSldo + sumPembelian;
+    // let KuantitasP = KuaAwalSldo + kPembelian;
+    const kAwal = awalS(saldoAwal, "Saldo Awal");
+
     // console.log(penjualan);
     // const swif = unique(dataA);
 
@@ -474,6 +510,20 @@ exports.PostPSPecData = async (req, res) => {
       data: {
         persediaan: {
           laba_rugi_persediaan: {
+            saldo: {
+              saldoAwal: kAwal,
+              saldoPersediaan: {
+                SaldoName: "Saldo Persediaan",
+                kuantitas: kAwal.kuantitas + kPembelian,
+                jumlah: (kAwal.kuantitas + kPembelian) * kAwal.harga,
+              },
+              saldoAkhir: {
+                SaldoName: "Saldo Akhir",
+                kuantitas: kAwal.kuantitas + kPembelian - kPenjualan,
+                jumlah:
+                  (kAwal.kuantitas + kPembelian - kPenjualan) * kAwal.harga,
+              },
+            },
             penjualan: {
               data: penjualan,
               total: sumPenjualan,

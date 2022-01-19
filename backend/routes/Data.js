@@ -54,7 +54,7 @@ router.get("/persediaann/:funcL", middleware, getSaldo);
 router.put("/persediaan/:upt", middleware, updateDataPersediaan);
 router.delete("/persediaan/:upt", middleware, deleteDataPersediaan);
 router.get("/Pspec/:p", middleware, getPSPecData);
-router.post("/Pspec", middleware, PostPSPecData);
+router.post("/Pspec/:p", middleware, PostPSPecData);
 // router.get("/persediaan/:penjualan", middleware, getAllDataPersediaanSpec);
 // router.get("/persediaan", middleware, getAllDataPersediaan);
 //? laba rugi
